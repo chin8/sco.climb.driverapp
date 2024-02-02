@@ -22,12 +22,33 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { createPinia } from 'pinia';
+import i18n from './plugins/i18n';
+import { defineRule, configure } from 'vee-validate'
+  import { required, email } from '@vee-validate/rules'
+  import { localize, setLocale } from '@vee-validate/i18n'
+  import en from '@vee-validate/i18n/dist/locale/en.json'
+  import it from '@vee-validate/i18n/dist/locale/it.json'
+import BaseLayout from './components/base/BaseLayout.vue';
+  // Vee Validate rules
+  defineRule('required', required)
+  defineRule('email', email)
+  configure({
+    validateOnInput: true,
+    generateMessage: localize({
+      en,
+      it
+    })
+  })
 
-const pinia = createPinia()
+  // Set initial locale
+  setLocale('it')
+const pinia = createPinia();
 const app = createApp(App)
   .use(IonicVue)
   .use(pinia)
+  .use(i18n)
   .use(router);
+app.component('base-layout', BaseLayout);
 router.isReady().then(() => {
   app.mount('#app');
 });

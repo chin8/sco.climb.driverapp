@@ -12,9 +12,8 @@ fetchVolunteers();
 </script>
 
 <template>
-  <ion-page>
-    <ion-content>
-  <main>
+    <base-layout page-title="Volontari" page-default-back-link="/home">
+  <div>
     <p v-if="loading">Loading volunteers...</p>
     <p v-if="error">{{ error.message }}</p>
     <div v-if="volunteers">
@@ -23,7 +22,6 @@ fetchVolunteers();
         </ion-item>
       </div>
     </div>
-  </main>
-</ion-content>
-  </ion-page>
+  </div>
+  </base-layout>
 </template>

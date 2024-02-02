@@ -20,13 +20,18 @@
     "@capacitor/status-bar": "5.0.6",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
+    "@vee-validate/i18n": "^4.12.5",
+    "@vee-validate/rules": "^4.12.5",
     "ionicons": "^7.0.0",
     "pinia": "^2.1.7",
+    "vee-validate": "^4.12.5",
     "vue": "^3.3.0",
+    "vue-i18n": "^9.9.1",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
     "@capacitor/cli": "5.5.1",
+    "@intlify/vite-plugin-vue-i18n": "^7.0.0",
     "@vitejs/plugin-legacy": "^5.0.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",

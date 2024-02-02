@@ -3,7 +3,7 @@
   import { useRoute } from "vue-router";
   import { storeToRefs } from 'pinia'
   import { useVolunteerStore } from '../store/volunteer'
-  import Volunteer from '../components/Volunteer.vue'
+  import Volunteer from '../components/volunteers/Volunteer.vue'
   import {  IonContent, IonPage } from "@ionic/vue";
 
   const route = useRoute() 
@@ -16,11 +16,9 @@
 </script>
 
 <template>
-    <ion-page>
-    <ion-content>
+    <base-layout page-title="Dettaglio" page-default-back-link="/volunteers">
   <div>
     <Volunteer :volunteer="getVolunteerByUserId"></Volunteer>
   </div>
-</ion-content>
-</ion-page>
+  </base-layout>
 </template>
