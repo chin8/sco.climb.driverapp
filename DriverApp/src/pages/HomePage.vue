@@ -31,7 +31,7 @@ const router = useRouter();
 <template>
     <base-layout page-title="Home">
       <div>{{ $t("welcome") }}</div>
-      <ion-select v-model="selected" @change="changeLocale(selected)" >
+      <ion-select v-model="selected" @ionChange="changeLocale(selected)" >
         <ion-select-option disabled value="">{{ $t("selection.language") }}</ion-select-option>
         <ion-select-option v-for="language in languages" :key="language.language" :value="language.language">{{ language.title }}</ion-select-option> 
       </ion-select>
