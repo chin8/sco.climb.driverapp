@@ -21,6 +21,8 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './theme/core.css';
+
 import { createPinia } from 'pinia';
 import i18n from './plugins/i18n';
 import { defineRule, configure } from 'vee-validate'
