@@ -8,7 +8,9 @@ import {
   IonBackButton,
   IonButtons,
 } from "@ionic/vue";
-defineProps(['pageTitle', 'pageDefaultBackLink'])
+
+defineProps(['pageTitle', 'pageDefaultBackLink']);
+
 </script>
 
 <template>

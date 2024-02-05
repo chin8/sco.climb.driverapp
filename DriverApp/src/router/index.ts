@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import  HomePage from '../pages/HomePage.vue';
 import  VolunteersPage from '../pages/VolunteersPage.vue';
 import  VolunteerPage from '../pages/VolunteerPage.vue';
+import RouteConfig from '../pages/RouteConfig.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -19,6 +20,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path:'/volunteer/:id',
     component:VolunteerPage
+  },
+  {
+    path:'/RouteConfig',
+    component:RouteConfig
   }
 ]
 
