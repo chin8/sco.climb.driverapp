@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from "vue-router";
 import {
   IonPage,
   IonHeader,
@@ -8,6 +9,9 @@ import {
   IonBackButton,
   IonButtons,
 } from "@ionic/vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 defineProps(['pageTitle', 'pageDefaultBackLink']);
 
