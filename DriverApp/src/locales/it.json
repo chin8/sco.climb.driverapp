@@ -4,5 +4,8 @@
   "selection":{
     "language":"Seleziona lingua"
   },
+  "home":{
+    "button":"Volontari"
+  },
   "language": "it"
 }

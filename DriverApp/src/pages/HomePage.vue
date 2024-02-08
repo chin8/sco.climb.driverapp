@@ -35,6 +35,6 @@ const router = useRouter();
         <ion-select-option disabled value="">{{ $t("selection.language") }}</ion-select-option>
         <ion-select-option v-for="language in languages" :key="language.language" :value="language.language">{{ language.title }}</ion-select-option> 
       </ion-select>
-      <ion-button @click="() => router.push('/volunteers')">Volontari</ion-button>
+      <ion-button @click="() => router.push('/volunteers')">{{ $t("home.button") }}</ion-button>
    </base-layout>
 </template>
