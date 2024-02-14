@@ -51,6 +51,24 @@ function handleAlertDismiss(event) {
 // ion-alert viene popolata
 let alertInputs = [];
 
+onMounted(async () => {
+  await fetchVolunteers(selectedSchool.value, selectedInstitute.value);
+
+  if (all_volunteers.value) {
+    const test = all_volunteers.value;
+    if (test) {
+      alertInputs = Object.keys(test).map((key) => {
+        const volunteer = test[key];
+        return {
+          type: "checkbox",
+          label: volunteer.name,
+          value: volunteer,
+          checked: false,
+        };
+      });
+    }
+  }
+});
   
 
 const alertButtons = [
