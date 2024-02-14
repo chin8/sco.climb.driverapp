@@ -4,7 +4,8 @@
     "language":"Select Language"
   },
   "home":{
-    "button":"Volunteers"
+    "button":"Volunteers",
+    "profile":"Profile"
   },
   "language": "en"
 }

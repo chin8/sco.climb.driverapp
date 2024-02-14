@@ -1,15 +1,15 @@
+import axios from "axios";
 import { defineStore } from "pinia";
 
 export interface User {
   user: any;
-  profile: any;
   userError: any;
 }
 
 interface State {
   user: any | null;
-  profile: any;
-  error: null;
+  loading:boolean;
+  error: null|unknown;
 }
 
 
@@ -17,7 +17,7 @@ export const useAuthStore = defineStore("authStore", {
   // convert to a function
   state: (): State => ({
     user: null,
-    profile: null,
+    loading : true,
     error: null,
   }),
   getters: {
@@ -35,7 +35,6 @@ export const useAuthStore = defineStore("authStore", {
     async logoutUser() {
 
     },
-
      
   },
 });

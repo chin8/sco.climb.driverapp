@@ -31,6 +31,10 @@ import { defineRule, configure } from 'vee-validate'
   import en from '@vee-validate/i18n/dist/locale/en.json'
   import it from '@vee-validate/i18n/dist/locale/it.json'
 import BaseLayout from './components/base/BaseLayout.vue';
+import axios from 'axios'
+import { Auth } from './services/AuthService';
+
+
   // Vee Validate rules
   defineRule('required', required)
   defineRule('email', email)
@@ -50,6 +54,14 @@ const app = createApp(App)
   .use(pinia)
   .use(i18n)
   .use(router);
+
+  axios.interceptors.request.use(async (config) => {
+    const token = await Auth.Instance.getValidToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token.accessToken}`
+    }
+    return config
+  })
 app.component('base-layout', BaseLayout);
 router.isReady().then(() => {
   app.mount('#app');

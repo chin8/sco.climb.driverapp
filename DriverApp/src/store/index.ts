@@ -1,4 +1,5 @@
-import { useAuthStore } from "./user";
+import { useAuthStore } from "./auth";
+import { useProfileStore } from "./profile";
 import { useVolunteerStore } from "./volunteer";
 import { useInstituteStore } from "./institute";
 import { useSchoolStore } from "./school";
@@ -11,5 +12,6 @@ export  {
     useInstituteStore,
     useSchoolStore,
     useRouteStore,
-    useVolunteersStore
+    useVolunteersStore,
+    useProfileStore,
 }

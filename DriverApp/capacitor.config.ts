@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'it.smartcommunitylab.climb.driverapp',
   appName: 'driverApp',
   webDir: 'dist',
   server: {

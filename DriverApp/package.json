@@ -12,6 +12,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@capacitor-community/http": "^1.4.1",
     "@capacitor/android": "5.5.1",
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "5.5.1",
@@ -22,6 +23,8 @@
     "@ionic/vue-router": "^7.0.0",
     "@vee-validate/i18n": "^4.12.5",
     "@vee-validate/rules": "^4.12.5",
+    "axios": "^1.6.7",
+    "ionic-appauth": "^2.0.0",
     "ionicons": "^7.0.0",
     "pinia": "^2.1.7",
     "vee-validate": "^4.12.5",
