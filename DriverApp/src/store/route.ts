@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useRouter } from 'vue-router';
 
 interface State {
   routes: null;
@@ -22,12 +23,18 @@ export const useRouteStore = defineStore("routeStore", {
   actions: {
     async fetchRoutes(instituteId: string, schoolId: string) {
       this.loading = true;
+      const router = useRouter();
       try {
         //https://climbdev.smartcommunitylab.it/v3/api/route/TEST/fe21135b-991d-4f1e-ae0f-3d15e15b4ee7/418184aa-26df-4a25-a026-c8511db469b2
         const fetchedData = await fetch(`src/tmp-data/route.json`).then(
           (response) => response.json()
         );
-        this.routes = fetchedData;
+        if (fetchedData.length === 1) {
+          this.selectedRoute = fetchedData[0];
+          router.push('/volunteers');
+        } else {
+          this.routes = fetchedData;
+        }  
       } catch (error) {
         this.error = error;
       } finally {

@@ -3,8 +3,8 @@ import { RouterLink } from "vue-router";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { useSchoolStore } from "../../store/configuration/school";
-import { useInstituteStore } from "../../store/configuration/institute";
+import { useSchoolStore } from "../../store/school";
+import { useInstituteStore } from "../../store/institute";
 import {
   IonList,
   IonListHeader,

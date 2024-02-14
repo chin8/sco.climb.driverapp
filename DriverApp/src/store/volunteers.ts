@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 interface State {
-  volunteers: null;
+  volunteers: null | Object;
   loading: boolean;
   error: null | unknown;
   selectedVolunteers: null | Object;
@@ -28,6 +28,7 @@ export const useVolunteersStore = defineStore("volunteersStore", {
           (response) => response.json()
         );
         this.volunteers = fetchedData;
+        // console.log(this.volunteers);
       } catch (error) {
         this.error = error;
       } finally {

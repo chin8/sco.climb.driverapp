@@ -1,9 +1,9 @@
 import { useAuthStore } from "./user";
 import { useVolunteerStore } from "./volunteer";
-import { useInstituteStore } from "./configuration/institute";
-import { useSchoolStore } from "./configuration/school";
-import { useRouteStore } from "./configuration/route";
-import { useVolunteersStore } from "./configuration/volunteers";
+import { useInstituteStore } from "./institute";
+import { useSchoolStore } from "./school";
+import { useRouteStore } from "./route";
+import { useVolunteersStore } from "./volunteers";
 
 export  {
     useAuthStore,

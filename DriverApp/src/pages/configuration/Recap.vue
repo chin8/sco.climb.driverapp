@@ -13,10 +13,10 @@ import {
   IonNote
 } from "@ionic/vue";
 import { useRouter } from "vue-router";
-import { useInstituteStore } from "../../store/configuration/institute";
-import { useSchoolStore } from "../../store/configuration/school";
-import { useRouteStore } from "../../store/configuration/route";
-import { useVolunteersStore } from "../../store/configuration/volunteers";
+import { useInstituteStore } from "../../store/institute";
+import { useSchoolStore } from "../../store/school";
+import { useRouteStore } from "../../store/route";
+import { useVolunteersStore } from "../../store/volunteers";
 
 const { selectedInstitute } = storeToRefs(useInstituteStore());
 const { selectedSchool } = storeToRefs(useSchoolStore());
@@ -24,8 +24,6 @@ const { selectedRoute } = storeToRefs(useRouteStore());
 const { selectedVolunteers } = storeToRefs(useVolunteersStore());
 
 const router = useRouter();
-
-console.log(selectedInstitute.value)
 
 </script>
 
@@ -37,28 +35,28 @@ console.log(selectedInstitute.value)
             <p>Institute</p>
             <h2>{{ selectedInstitute.name }}</h2>
           </ion-label>
-          <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.push('/institutes')">Modifica</ion-note>
+          <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.go(-4)">Modifica</ion-note>
         </ion-item>
         <ion-item>
           <ion-label>
             <p>School</p>
             <h2>{{ selectedSchool.name }}</h2>
           </ion-label>
-          <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.push('/schools')">Modifica</ion-note>
+          <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.go(-3)">Modifica</ion-note>
         </ion-item>
         <ion-item>
           <ion-label>
             <p>Routes</p>
             <h2>{{ selectedRoute.name }}</h2>
           </ion-label>
-          <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.push('/routes')">Modifica</ion-note>
+          <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.go(-2)">Modifica</ion-note>
         </ion-item>
         <ion-list>
           <ion-item>
             <ion-label>
               <p>Volunteers</p>
             </ion-label>
-             <ion-note slot="end" class="ion-margin-bottom" @click="router.push('/volunteers')">Modifica</ion-note>
+             <ion-note slot="end" class="ion-margin-bottom" @click="router.go(-1)">Modifica</ion-note>
           </ion-item>
           <ion-item v-for="volunteer in selectedVolunteers" :key="volunteer.objectId">
             <ion-label>{{ volunteer.name }}</ion-label>
