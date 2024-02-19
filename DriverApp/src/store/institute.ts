@@ -1,5 +1,5 @@
+import axios from "axios";
 import { defineStore } from "pinia";
-import { useRouter } from 'vue-router';
 
 interface State {
   institutes: null;
@@ -23,18 +23,9 @@ export const useInstituteStore = defineStore("InstituteStore", {
   actions: {
     async fetchInstitutes() {
       this.loading = true;
-      const router = useRouter();
       try {
-        //https://climbdev.smartcommunitylab.it/v3/api/institute/TEST
-        const fetchedData = await fetch(`src/tmp-data/institute.json`).then(
-          (response) => response.json()
-        );
-        if (fetchedData.length === 1) {
-          this.selectedInstitute = fetchedData[0];
-          router.push('/schools');
-        } else {
-          this.institutes = fetchedData;
-        }        
+        const fetchedData = await axios.get(import.meta.env.VITE_SERVER_URL+'/institute/TEST');
+        this.institutes = fetchedData.data;
       } catch (error) {
         this.error = error;
       } finally {

@@ -16,7 +16,7 @@ import {
 } from "@ionic/vue";
 import { arrowBack, chevronForward } from "ionicons/icons";
 import { defineComponent } from "vue";
-
+import { all } from "axios";
 
 const { all_institutes, loading, error, selectedInstitute } = storeToRefs(
   useInstituteStore()
@@ -25,7 +25,15 @@ const { fetchInstitutes, selected } = useInstituteStore();
 
 const router = useRouter();
 
-fetchInstitutes();
+onMounted(async () => {
+  await fetchInstitutes();
+  
+  if (all_institutes.value && all_institutes.value.length === 1) {
+    selected(all_institutes.value[0]);
+    router.push("/schools");
+  }
+});
+
 </script>
 
 <template>

@@ -33,8 +33,14 @@ const { fetchRoutes, selected } = useRouteStore();
 
 const router = useRouter();
 
-fetchRoutes(selectedSchool.value, selectedInstitute.value);
+onMounted(async () => {
+  await fetchRoutes(selectedInstitute.value.objectId, selectedSchool.value.objectId);
 
+  if (all_routes.value && all_routes.value.length === 1) {
+    selected(all_routes.value[0]);
+    router.push("/volunteers");
+  }
+});
 </script>
 
 <template>

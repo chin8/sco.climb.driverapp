@@ -28,7 +28,16 @@ const { fetchSchools, selected } = useSchoolStore();
 
 const router = useRouter();
 
-fetchSchools(selectedInstitute.value);
+
+onMounted(async () => {
+  await fetchSchools(selectedInstitute.value.objectId);
+  
+  if (all_schools.value && all_schools.value.length === 1) {
+    selected(all_schools.value[0]);
+    router.push("/routes");
+  }
+});
+
 </script>
 
 <template>

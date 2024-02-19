@@ -35,30 +35,28 @@ const { all_volunteers, loading, error, selectedVolunteers } = storeToRefs(
 
 const router = useRouter();
 
-// TODO: "annulla"
+// checked true per elementi spuntati nel componente
 function handleAlertDismiss(event) {
   if (event.detail.role === "confirm") {
     alertInputs.forEach((input) => {
       input.checked = event.detail.data.values.includes(input.value);
     });
-    const selectedVolunteers = alertInputs
-      .filter((input) => input.checked)
-      .map((input) => input.value);
+    // elementi con checked true aggiunti allo store selected
+    const selectedVolunteers = alertInputs.filter((input) => input.checked).map((input) => input.value);
     selected(selectedVolunteers);
   }
 }
 
-// ion-alert viene popolata
 let alertInputs = [];
 
 onMounted(async () => {
-  await fetchVolunteers(selectedSchool.value, selectedInstitute.value);
-
+  await fetchVolunteers(selectedInstitute.value.objectId, selectedSchool.value.objectId);
+  // ion-alert viene popolata
   if (all_volunteers.value) {
-    const test = all_volunteers.value;
-    if (test) {
-      alertInputs = Object.keys(test).map((key) => {
-        const volunteer = test[key];
+    const volunteers = all_volunteers.value;
+    if (volunteers) {
+      alertInputs = Object.keys(volunteers).map((key) => {
+        const volunteer = volunteers[key];
         return {
           type: "checkbox",
           label: volunteer.name,

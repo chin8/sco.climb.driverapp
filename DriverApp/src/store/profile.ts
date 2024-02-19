@@ -30,7 +30,6 @@ export const useProfileStore = defineStore("profileStore", {
         this.loading = true
         try {
           const profile = await axios.get(import.meta.env.VITE_SERVER_URL+'/profile');
-          console.log(profile)
           this.profile = profile.data;
         } catch (error) {
           this.error = error
