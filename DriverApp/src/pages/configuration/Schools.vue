@@ -14,6 +14,7 @@ import {
   IonHeader,
   IonButtons,
   IonButton,
+  IonSpinner
 } from "@ionic/vue";
 import { arrowBack, chevronForward } from "ionicons/icons";
 import { defineComponent } from "vue";
@@ -33,8 +34,10 @@ onMounted(async () => {
   await fetchSchools(selectedInstitute.value.objectId);
   
   if (all_schools.value && all_schools.value.length === 1) {
-    selected(all_schools.value[0]);
-    router.push("/routes");
+    setTimeout(() => {
+      selected(all_schools.value[0]);
+      router.push({ path: '/routes', replace: true, transition: false });
+    }, 1500);
   }
 });
 
@@ -48,7 +51,11 @@ onMounted(async () => {
     <div>
       <p v-if="loading">Loading...</p>
       <p v-if="error">{{ error.message }}</p>
-      <div v-if="all_schools">
+      <div v-if="all_schools && all_schools.length < 2" class="ion-padding ion-text-center">
+        <ion-spinner class="ion-padding-top"></ion-spinner>
+        <ion-label class="ion-padding">Autoselezione della scuola...</ion-label>
+      </div>      
+      <div v-if="all_schools && all_schools.length > 1">
         <ion-list>
           <ion-item
             v-for="school in all_schools"

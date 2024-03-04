@@ -5,6 +5,8 @@ import { useInstituteStore } from "./institute";
 import { useSchoolStore } from "./school";
 import { useRouteStore } from "./route";
 import { useVolunteersStore } from "./volunteers";
+import { useStopsStore } from "./stops";
+
 
 export  {
     useAuthStore,
@@ -14,4 +16,5 @@ export  {
     useRouteStore,
     useVolunteersStore,
     useProfileStore,
+    useStopsStore
 }

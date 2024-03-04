@@ -3,11 +3,12 @@ import { RouteRecordRaw } from 'vue-router';
 import  HomePage from '../pages/HomePage.vue';
 import  VolunteersPage from '../pages/VolunteersPage.vue';
 import  VolunteerPage from '../pages/VolunteerPage.vue';
-import Institutes from '../pages/configuration/Institutes.vue'
-import Schools from '../pages/configuration/Schools.vue'
-import Routes from '../pages/configuration/Routes.vue'
-import Volunteers from '../pages/configuration/Volunteers.vue'
-import Recap from '../pages/configuration/Recap.vue'
+import Institutes from '../pages/configuration/Institutes.vue';
+import Schools from '../pages/configuration/Schools.vue';
+import Routes from '../pages/configuration/Routes.vue';
+import Volunteers from '../pages/configuration/Volunteers.vue';
+import Stops from '../pages/Stops.vue';
+import Recap from '../pages/configuration/Recap.vue';
 import ProfilePage from '../pages/ProfilePage.vue';
 import { Auth } from '@/services/AuthService';
 import { filter, switchMap, take } from 'rxjs/operators';
@@ -70,8 +71,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path:'/volunteer/:id',
     component:VolunteerPage
+  },
+  {
+    path: '/stops',
+    component: Stops
   }
-  
 ]
 
 const router = createRouter({

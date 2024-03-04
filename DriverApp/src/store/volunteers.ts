@@ -13,7 +13,7 @@ export const useVolunteersStore = defineStore("volunteersStore", {
     volunteers: null,
     loading: false,
     error: null,
-    selectedVolunteers: null,
+    selectedVolunteers: [],
   }),
   getters: {
     all_volunteers: (state) => state.volunteers,
@@ -37,7 +37,7 @@ export const useVolunteersStore = defineStore("volunteersStore", {
         this.selectedVolunteers = value;
     },
     delete_selected(){
-        this.selectedVolunteers = null;        
-    },
+      this.selectedVolunteers = null;
+  },
   },
 });
