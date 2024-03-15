@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 
 interface State {
   stops: null;
+  onBoard: null;
   loading: boolean;
   error: null | unknown;
 }
@@ -11,6 +12,7 @@ interface State {
 export const useStopsStore = defineStore("useStopsStore", {
   state: (): State => ({
     stops: null,
+    onBoard: null,
     loading: false,
     error: null,
   }),
@@ -23,12 +25,37 @@ export const useStopsStore = defineStore("useStopsStore", {
       this.loading = true;
       try {
         const fetchedData = await axios.get(import.meta.env.VITE_SERVER_URL+'/stop/TEST/'+routeId);
-        this.stops = fetchedData.data;
+        const stopsWithModifiedPassengerList = fetchedData.data.map(stop => ({
+          ...stop,
+          passengerList: stop.passengerList.map(passenger => ({
+            passenger: passenger,
+            onBoard: false
+          }))
+        }));
+        this.stops = stopsWithModifiedPassengerList;
       } catch (error) {
         this.error = error;
       } finally {
         this.loading = false;
       }
+    },    
+    addOnBoard(passenger: string) {
+      this.stops.forEach(stop => {
+        stop.passengerList.forEach(item => {
+          if (item.passenger === passenger) {
+            item.onBoard = true;
+          }
+        });
+      });
+    },    
+    removeOnBoard(passenger: string) {
+      this.stops.forEach(stop => {
+        stop.passengerList.forEach(item => {
+          if (item.passenger === passenger) {
+            item.onBoard = false;
+          }
+        });
+      });
     }
   },
 });

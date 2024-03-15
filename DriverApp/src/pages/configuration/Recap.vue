@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
+import { ref, onMounted, computed } from "vue";
 import {
   IonList,
   IonListHeader,
@@ -17,13 +18,37 @@ import { useInstituteStore } from "../../store/institute";
 import { useSchoolStore } from "../../store/school";
 import { useRouteStore } from "../../store/route";
 import { useVolunteersStore } from "../../store/volunteers";
+import { useProfileStore } from "../../store/profile";
+import { useEventsStore } from "../../store/events";
+
 
 const { selectedInstitute, all_institutes } = storeToRefs(useInstituteStore());
 const { selectedSchool, all_schools } = storeToRefs(useSchoolStore());
 const { selectedRoute, all_routes } = storeToRefs(useRouteStore());
 const { selectedVolunteers } = storeToRefs(useVolunteersStore());
+const { profile } = storeToRefs(useProfileStore());
+
+const { fetchProfile } = useProfileStore();
+const { setDriver, setHelper } = useEventsStore();
+
 
 const router = useRouter();
+
+onMounted(() => {
+  fetchProfile();
+});
+
+const helpers = () => {
+  for (let index = 0; index < selectedVolunteers.value.length; index++) {
+    setHelper(selectedVolunteers.value[index].objectId, selectedRoute.value.objectId)
+  }
+}
+
+const handleStart = async () => {
+  await router.push({ path: '/stops' });
+  await setDriver(profile.value.objectId, selectedRoute.value.objectId);
+  helpers();
+}
 </script>
 
 <template>
@@ -63,7 +88,7 @@ const router = useRouter();
       </ion-list>
 
       <div class="ion-padding">
-        <ion-button expand="full" class="ion-margin-top" fill="solid" @click="router.push({ path: '/stops' })">Inizia</ion-button>
+        <ion-button expand="full" class="ion-margin-top" fill="solid" @click="handleStart()">Inizia</ion-button>
       </div>
     </div>
   </base-layout>
