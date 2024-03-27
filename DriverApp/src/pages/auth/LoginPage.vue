@@ -14,11 +14,14 @@ import {
 import { AuthActions } from "ionic-appauth";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import { geolocalize } from "../../services/GeoService";
+
 const router = useRouter();
 let event = ref("");
 Auth.Instance.events$.subscribe((action) => {
   event = JSON.stringify(action);
   if (action.action === AuthActions.SignInSuccess) {
+    geolocalize();
     router.push("/Institutes");
   }
 });

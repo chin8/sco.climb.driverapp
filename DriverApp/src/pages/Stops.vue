@@ -44,18 +44,20 @@ const stopIndex = ref(0);
 
 const routeId = selectedRoute.value.objectId;
 
-const goForward = () => {
-  if (stopIndex.value < all_stops.value.length - 1) {
-    if(stopIndex.value == 0) {
-      startRoute(routeId, all_stops.value[viewIndex.value].objectId);
-      startWatchingPosition(function (position) {
+startWatchingPosition(function (position:any) {
             if (!!position && !!position.coords) {
               var lat = position.coords.latitude
               var lon = position.coords.longitude
               var acc = position.coords.accuracy
-              driverPosition(null, lat, lon, acc)
+              driverPosition(null,null, lat, lon, acc)
             }
           }, null, 4000)
+
+const goForward = () => {
+  if (stopIndex.value < all_stops.value.length - 1) {
+    if(stopIndex.value == 0) {
+      startRoute(routeId, all_stops.value[viewIndex.value].objectId);
+
     };
     if (stopIndex.value === viewIndex.value) {
       stopIndex.value++;
