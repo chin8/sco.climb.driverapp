@@ -1,5 +1,7 @@
-import axios from "axios";
 import { defineStore } from "pinia";
+import { Geolocation } from '@capacitor/geolocation';
+import { geolocalizeEvent } from "../services/GeoService";
+
 
 var AE = {
   NODE_IN_RANGE: 101,
@@ -16,9 +18,6 @@ var AE = {
   BATTERY_STATE: 501,
 };
 
-interface State {
-  events: [];
-}
 
 export const useEventsStore = defineStore({
   id: "event",
@@ -36,7 +35,7 @@ export const useEventsStore = defineStore({
           volunteerId: driver,
         },
       };
-      // Geolocalizzare l'evento
+      geolocalizeEvent(event);
       this.events.push(event);
     },
     setHelper(helper: string, routeId: string) {
@@ -49,7 +48,7 @@ export const useEventsStore = defineStore({
           volunteerId: helper,
         },
       };
-      // Geolocalizzare l'evento
+      geolocalizeEvent(event);
       this.events.push(event);
     },
     startRoute(stopId: string, routeId: string) {
@@ -62,7 +61,7 @@ export const useEventsStore = defineStore({
           stopId: stopId,
         },
       };
-      // Geolocalizzare l'evento
+      geolocalizeEvent(event);
       this.events.push(event);
     },
     stopLeave(stopId: string, routeId: string) {
@@ -75,7 +74,7 @@ export const useEventsStore = defineStore({
           stopId: stopId,
         },
       };
-      // Geolocalizzare l'evento
+      geolocalizeEvent(event);
       this.events.push(event);
     },
     nodeCheckin(passengerId: string, routeId: string) {
@@ -88,7 +87,7 @@ export const useEventsStore = defineStore({
           passengerId: passengerId,
         },
       };
-      // Geolocalizzare l'evento
+      geolocalizeEvent(event);
       this.events.push(event);
     },
     nodeCheckout(passengerId: string, routeId: string) {
@@ -101,8 +100,59 @@ export const useEventsStore = defineStore({
           passengerId: passengerId,
         },
       };
-      // Geolocalizzare l'evento
+      geolocalizeEvent(event);
       this.events.push(event);
     },
-  },
+    driverPosition (routeId: string, volunteerId: string, lat: number, lon: number, accuracy: number) {
+      if (!lat) {
+        lat = 0
+      }
+      if (!lon) {
+        lon = 0
+      }
+      if (!accuracy) {
+        accuracy = 0
+      }
+
+      var event = {
+        routeId: routeId,
+        wsnNodeId: null,
+        eventType: AE.DRIVER_POSITION,
+        timestamp: Date.now(),
+        payload: {
+          'volunteerId': volunteerId,
+          'latitude': lat,
+          'longitude': lon,
+          'accuracy': accuracy
+        },
+      };
+      this.events.push(event);
+    },
+    nodeAtDestination (passengerId: string, routeId: string) {
+      const event = {
+        routeId: routeId,
+        wsnNodeId: null,
+        eventType: AE.NODE_AT_DESTINATION,
+        timestamp: Date.now(),
+        payload: {
+          passengerId: passengerId,
+        },
+      };
+      geolocalizeEvent(event);
+      this.events.push(event);
+    },
+    endRoute (stopId: string, routeId: string) {
+      const event = {
+        routeId: routeId,
+        wsnNodeId: null,
+        eventType: AE.END_ROUTE,
+        timestamp: Date.now(),
+        payload: {
+          stopId: stopId,
+        },
+      };
+      geolocalizeEvent(event);
+      this.events.push(event);
+    }
+  }
 });

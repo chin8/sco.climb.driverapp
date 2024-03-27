@@ -7,6 +7,7 @@ import { useRouteStore } from "./route";
 import { useVolunteersStore } from "./volunteers";
 import { useStopsStore } from "./stops";
 import { useEventsStore } from "./events";
+import { useChildStore } from "./child";
 
 
 export  {
@@ -18,5 +19,6 @@ export  {
     useVolunteersStore,
     useProfileStore,
     useStopsStore,
-    useEventsStore
+    useEventsStore,
+    useChildStore
 }

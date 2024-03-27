@@ -21,46 +21,102 @@ import { useRouter } from "vue-router";
 import { useStopsStore } from "../store/stops";
 import { useRouteStore } from "../store/route";
 import { useEventsStore } from "../store/events";
+import { useChildStore } from "../store/child";
 import { OverlayEventDetail } from "@ionic/core/components";
 import { ref } from "vue";
+import { startWatchingPosition, stopWatchingPosition } from "../services/GeoService";
 
-const message = ref(
-  "This modal example uses triggers to automatically open a modal when the button is clicked."
-);
 
 const modal = ref();
 const input = ref();
 
 const { selectedRoute } = storeToRefs(useRouteStore());
 const { fetchStops, addOnBoard, removeOnBoard } = useStopsStore();
-const { nodeCheckin, nodeCheckout, stopLeave, startRoute, events } = useEventsStore();
+const { nodeCheckin, nodeCheckout, stopLeave, startRoute, driverPosition, nodeAtDestination, endRoute, events } = useEventsStore();
+const { all_child } = storeToRefs(useChildStore());
 
 const { all_stops, loading, error } = storeToRefs(useStopsStore());
 
 const router = useRouter();
 
-const currentIndex = ref(0);
+const viewIndex = ref(0);
+const stopIndex = ref(0);
 
 const routeId = selectedRoute.value.objectId;
 
-
 const goForward = () => {
-  if (currentIndex.value < all_stops.value.length - 1) {
-    // in questo modo viene salvato l'evento tutte le volte che torno al primo stop
-    // il checkin viene salvato prima di start route
-    if(currentIndex.value == 0) {
-      startRoute(routeId, all_stops.value[currentIndex.value].objectId)
+  if (stopIndex.value < all_stops.value.length - 1) {
+    if(stopIndex.value == 0) {
+      startRoute(routeId, all_stops.value[viewIndex.value].objectId);
+      startWatchingPosition(function (position) {
+            if (!!position && !!position.coords) {
+              var lat = position.coords.latitude
+              var lon = position.coords.longitude
+              var acc = position.coords.accuracy
+              driverPosition(null, lat, lon, acc)
+            }
+          }, null, 4000)
+    };
+    if (stopIndex.value === viewIndex.value) {
+      stopIndex.value++;
     }
-    stopLeave(routeId, all_stops.value[currentIndex.value].objectId);
-    currentIndex.value++;
+    if(all_stops.value[stopIndex.value + 1]) {
+      stopLeave(routeId, all_stops.value[viewIndex.value].objectId);
+    }
+  }
+  if (viewIndex.value < all_stops.value.length - 1) {
+    viewIndex.value++;
   }
 };
 
 const goBack = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--;
+  if (viewIndex.value > 0) {
+    viewIndex.value--;
   }
 };
+
+const handleAdd = (passenger: string) => {
+  addOnBoard(passenger);
+  nodeCheckin(passenger, routeId);
+}
+
+const handleRemove = (passenger: string) => {
+  removeOnBoard(passenger);
+  nodeCheckout(passenger, routeId)
+}
+
+const getChild = (childId: any) => {
+  var foundChild = null
+  for (var i = 0; i < all_child.value.length; i++) {
+    var child = all_child.value[i];
+    if (child.objectId === childId) {
+      foundChild = child;
+    }
+  }
+  return foundChild
+}
+
+const send = () => {
+  // get onBoard
+  const onBoard = [];
+  all_stops.value.forEach(stop => {
+    stop.passengerList.forEach(passenger => {
+      if (passenger.onBoard) {
+        onBoard.push(passenger.passenger);
+      }
+    });
+  });
+  // get Child from Id
+  onBoard.forEach(child => {
+    var child = getChild(child);
+    nodeCheckout(child.objectId, routeId);
+    nodeAtDestination(child.objectId, routeId);
+  })
+  endRoute(all_stops.value[stopIndex.value].objectId, routeId);
+  stopWatchingPosition();
+  console.log(events);
+};
+
 
 const isOpen = ref(false);
 
@@ -76,27 +132,28 @@ if (routeId && !all_stops.value) {
     <ion-header class="header">
       <ion-toolbar color="secodary">
         <ion-buttons slot="start">
-          <ion-button @click="goBack()" v-if="currentIndex !== 0">
+          <ion-button @click="goBack()" v-if="viewIndex !== 0">
             <ion-icon :icon="chevronBack" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-title v-if="all_stops">{{
-            all_stops[currentIndex]?.name
+            all_stops[viewIndex]?.name
           }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="goForward()" v-if="currentIndex !== all_stops?.length - 1">
-            <ion-icon :icon="chevronForward" slot="icon-only"></ion-icon>
+          <ion-button @click="goForward()" v-if="all_stops && viewIndex !== all_stops.length - 1 && all_stops[viewIndex + 1]">
+            <p v-if="viewIndex === stopIndex">{{ all_stops[viewIndex+1].name }}</p>
+            <ion-icon v-if="viewIndex < stopIndex" :icon="chevronForward" slot="icon-only"></ion-icon>
           </ion-button>
-          <ion-button v-if="currentIndex === all_stops?.length - 1">arriva</ion-button>
+          <ion-button v-if="viewIndex === all_stops?.length - 1" @click="send()">arriva</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding" v-if="all_stops">
       <ion-list>
-        <div v-for="passenger in all_stops[currentIndex]?.passengerList" :key="passenger">
+        <div v-for="passenger in all_stops[viewIndex]?.passengerList" :key="passenger">
           <ion-item v-if="passenger.onBoard === false">
             <ion-label>{{ passenger.passenger }}</ion-label>
-            <button class="addButton" @click="addOnBoard(passenger.passenger); nodeCheckin(passenger.passenger, routeId); console.log(events);">
+            <button class="addButton" @click="handleAdd(passenger.passenger)">
               <ion-icon :icon="addOutline" slot="end"></ion-icon>
             </button>
           </ion-item>
@@ -120,7 +177,7 @@ if (routeId && !all_stops.value) {
               <div v-for="passenger in stop.passengerList" :key="passenger">
                 <ion-item v-if="passenger.onBoard === true">
                   <ion-label>{{ passenger.passenger }}</ion-label>
-                  <button class="addButton" @click="removeOnBoard(passenger.passenger); nodeCheckout(passenger.passenger, routeId)">
+                  <button class="addButton" @click="handleRemove(passenger.passenger)">
                     <ion-icon :icon="removeOutline" slot="end"></ion-icon>
                   </button>
                 </ion-item>

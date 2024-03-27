@@ -20,13 +20,14 @@ import { useRouteStore } from "../../store/route";
 import { useVolunteersStore } from "../../store/volunteers";
 import { useProfileStore } from "../../store/profile";
 import { useEventsStore } from "../../store/events";
-
+import { useChildStore } from "../../store/child";
 
 const { selectedInstitute, all_institutes } = storeToRefs(useInstituteStore());
 const { selectedSchool, all_schools } = storeToRefs(useSchoolStore());
 const { selectedRoute, all_routes } = storeToRefs(useRouteStore());
 const { selectedVolunteers } = storeToRefs(useVolunteersStore());
 const { profile } = storeToRefs(useProfileStore());
+const { fetchChild } = useChildStore();
 
 const { fetchProfile } = useProfileStore();
 const { setDriver, setHelper } = useEventsStore();
@@ -36,6 +37,7 @@ const router = useRouter();
 
 onMounted(() => {
   fetchProfile();
+  fetchChild(selectedInstitute.value.objectId, selectedSchool.value.objectId);
 });
 
 const helpers = () => {
@@ -45,9 +47,9 @@ const helpers = () => {
 }
 
 const handleStart = async () => {
-  await router.push({ path: '/stops' });
   await setDriver(profile.value.objectId, selectedRoute.value.objectId);
   helpers();
+  await router.push({ path: '/stops' });
 }
 </script>
 
