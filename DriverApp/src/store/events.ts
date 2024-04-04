@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
-import { Geolocation } from '@capacitor/geolocation';
 import { geolocalizeEvent } from "../services/GeoService";
 
 
-var AE = {
+const AE = {
   NODE_IN_RANGE: 101,
   NODE_CHECKIN: 102,
   NODE_CHECKOUT: 103,
@@ -18,10 +17,13 @@ var AE = {
   BATTERY_STATE: 501,
 };
 
+interface State {
+  events: any[];
+}
 
 export const useEventsStore = defineStore({
   id: "event",
-  state: () => ({
+  state: (): State => ({
     events: [],
   }),
   actions: {
@@ -36,7 +38,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     setHelper(helper: string, routeId: string) {
       const event = {
@@ -49,7 +51,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     startRoute(stopId: string, routeId: string) {
       const event = {
@@ -62,7 +64,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     stopLeave(stopId: string, routeId: string) {
       const event = {
@@ -75,7 +77,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     nodeCheckin(passengerId: string, routeId: string) {
       const event = {
@@ -88,7 +90,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     nodeCheckout(passengerId: string, routeId: string) {
       const event = {
@@ -101,7 +103,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     driverPosition (routeId: string, volunteerId: string, lat: number, lon: number, accuracy: number) {
       if (!lat) {
@@ -114,7 +116,7 @@ export const useEventsStore = defineStore({
         accuracy = 0
       }
 
-      var event = {
+      const event = {
         routeId: routeId,
         wsnNodeId: null,
         eventType: AE.DRIVER_POSITION,
@@ -126,7 +128,7 @@ export const useEventsStore = defineStore({
           'accuracy': accuracy
         },
       };
-      this.events.push(event);
+      this.events?.push(event);
     },
     nodeAtDestination (passengerId: string, routeId: string) {
       const event = {
@@ -139,7 +141,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     },
     endRoute (stopId: string, routeId: string) {
       const event = {
@@ -152,7 +154,7 @@ export const useEventsStore = defineStore({
         },
       };
       geolocalizeEvent(event);
-      this.events.push(event);
+      this.events?.push(event);
     }
   }
 });

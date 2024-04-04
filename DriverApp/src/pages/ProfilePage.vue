@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { onMounted, computed } from "vue";
 import { useProfileStore } from "../store/profile";
 const store = useProfileStore();
 

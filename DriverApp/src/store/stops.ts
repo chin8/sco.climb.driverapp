@@ -3,16 +3,16 @@ import { defineStore } from "pinia";
 
 
 interface State {
-  stops: null;
-  onBoard: null;
+  stops: any[];
+  onBoard: any[];
   loading: boolean;
   error: null | unknown;
 }
 
 export const useStopsStore = defineStore("useStopsStore", {
   state: (): State => ({
-    stops: null,
-    onBoard: null,
+    stops: [],
+    onBoard: [],
     loading: false,
     error: null,
   }),
@@ -25,9 +25,10 @@ export const useStopsStore = defineStore("useStopsStore", {
       this.loading = true;
       try {
         const fetchedData = await axios.get(import.meta.env.VITE_SERVER_URL+'/stop/TEST/'+routeId);
-        const stopsWithModifiedPassengerList = fetchedData.data.map(stop => ({
+        console.log(fetchedData);
+        const stopsWithModifiedPassengerList = fetchedData.data.map((stop: any) => ({
           ...stop,
-          passengerList: stop.passengerList.map(passenger => ({
+          passengerList: stop.passengerList.map((passenger: string) => ({
             passenger: passenger,
             onBoard: false
           }))
@@ -40,8 +41,8 @@ export const useStopsStore = defineStore("useStopsStore", {
       }
     },    
     addOnBoard(passenger: string) {
-      this.stops.forEach(stop => {
-        stop.passengerList.forEach(item => {
+      this.stops?.forEach(stop => {
+        stop.passengerList.forEach((item: any) => {
           if (item.passenger === passenger) {
             item.onBoard = true;
           }
@@ -49,8 +50,8 @@ export const useStopsStore = defineStore("useStopsStore", {
       });
     },    
     removeOnBoard(passenger: string) {
-      this.stops.forEach(stop => {
-        stop.passengerList.forEach(item => {
+      this.stops?.forEach(stop => {
+        stop.passengerList.forEach((item: any) => {
           if (item.passenger === passenger) {
             item.onBoard = false;
           }

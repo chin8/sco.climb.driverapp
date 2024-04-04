@@ -8,65 +8,77 @@ import {
   IonToolbar,
   IonTitle,
   IonItem,
-  IonInput,
   IonIcon,
   IonLabel,
   IonList,
 } from "@ionic/vue";
-import { RouterLink } from "vue-router";
-import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
-import { chevronForward, chevronBack, addOutline, removeOutline } from "ionicons/icons";
-import { useRouter } from "vue-router";
+import {
+  chevronForward,
+  chevronBack,
+  addOutline,
+  removeOutline,
+} from "ionicons/icons";
 import { useStopsStore } from "../store/stops";
 import { useRouteStore } from "../store/route";
 import { useEventsStore } from "../store/events";
 import { useChildStore } from "../store/child";
-import { OverlayEventDetail } from "@ionic/core/components";
 import { ref } from "vue";
-import { startWatchingPosition, stopWatchingPosition } from "../services/GeoService";
 
+import { addEvents } from "../services/APIService";
 
-const modal = ref();
-const input = ref();
+import {
+  startWatchingPosition,
+  stopWatchingPosition,
+} from "../services/GeoService";
 
-const { selectedRoute } = storeToRefs(useRouteStore());
+const { selected_route } = storeToRefs(useRouteStore());
 const { fetchStops, addOnBoard, removeOnBoard } = useStopsStore();
-const { nodeCheckin, nodeCheckout, stopLeave, startRoute, driverPosition, nodeAtDestination, endRoute, events } = useEventsStore();
+const {
+  nodeCheckin,
+  nodeCheckout,
+  stopLeave,
+  startRoute,
+  driverPosition,
+  nodeAtDestination,
+  endRoute,
+  events,
+} = useEventsStore();
+
 const { all_child } = storeToRefs(useChildStore());
-
-const { all_stops, loading, error } = storeToRefs(useStopsStore());
-
-const router = useRouter();
+const { all_stops } = storeToRefs(useStopsStore());
 
 const viewIndex = ref(0);
 const stopIndex = ref(0);
 
-const routeId = selectedRoute.value.objectId;
+const routeId: string = (selected_route?.value as any)?.objectId || "";
 
-startWatchingPosition(function (position:any) {
-            if (!!position && !!position.coords) {
-              var lat = position.coords.latitude
-              var lon = position.coords.longitude
-              var acc = position.coords.accuracy
-              driverPosition(null,null, lat, lon, acc)
-            }
-          }, null, 4000)
+startWatchingPosition(
+  function (position: any) {
+    if (!!position && !!position.coords) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const acc = position.coords.accuracy;
+      driverPosition(routeId, "null", lat, lon, acc);
+    }
+  },
+  null,
+  4000
+);
 
 const goForward = () => {
   if (stopIndex.value < all_stops.value.length - 1) {
-    if(stopIndex.value == 0) {
+    if (stopIndex.value == 0) {
       startRoute(routeId, all_stops.value[viewIndex.value].objectId);
-
-    };
+    }
+    if (all_stops.value[stopIndex.value + 1]) {
+      stopLeave(routeId, all_stops.value[viewIndex.value].objectId);
+    }
     if (stopIndex.value === viewIndex.value) {
       stopIndex.value++;
     }
-    if(all_stops.value[stopIndex.value + 1]) {
-      stopLeave(routeId, all_stops.value[viewIndex.value].objectId);
-    }
   }
-  if (viewIndex.value < all_stops.value.length - 1) {
+  if (viewIndex.value < all_stops.value?.length - 1) {
     viewIndex.value++;
   }
 };
@@ -80,51 +92,51 @@ const goBack = () => {
 const handleAdd = (passenger: string) => {
   addOnBoard(passenger);
   nodeCheckin(passenger, routeId);
-}
+};
 
 const handleRemove = (passenger: string) => {
   removeOnBoard(passenger);
-  nodeCheckout(passenger, routeId)
-}
+  nodeCheckout(passenger, routeId);
+};
 
 const getChild = (childId: any) => {
-  var foundChild = null
-  for (var i = 0; i < all_child.value.length; i++) {
-    var child = all_child.value[i];
+  let foundChild = null;
+  for (let i = 0; i < all_child.value.length; i++) {
+    const child = all_child.value[i];
     if (child.objectId === childId) {
       foundChild = child;
     }
   }
-  return foundChild
-}
+  return foundChild;
+};
 
 const send = () => {
   // get onBoard
-  const onBoard = [];
-  all_stops.value.forEach(stop => {
-    stop.passengerList.forEach(passenger => {
+  const onBoard: any[] = [];
+  all_stops.value?.forEach((stop) => {
+    stop.passengerList.forEach((passenger: any) => {
       if (passenger.onBoard) {
         onBoard.push(passenger.passenger);
       }
     });
   });
   // get Child from Id
-  onBoard.forEach(child => {
-    var child = getChild(child);
+  onBoard.forEach((passenger) => {
+    const child = getChild(passenger);
     nodeCheckout(child.objectId, routeId);
     nodeAtDestination(child.objectId, routeId);
-  })
+  });
+  addEvents(routeId, events);
   endRoute(all_stops.value[stopIndex.value].objectId, routeId);
   stopWatchingPosition();
   console.log(events);
 };
 
-
 const isOpen = ref(false);
 
 const setOpen = (open: boolean) => (isOpen.value = open);
 
-if (routeId && !all_stops.value) {
+if (routeId) {
   fetchStops(routeId);
 }
 </script>
@@ -132,21 +144,24 @@ if (routeId && !all_stops.value) {
 <template>
   <base-layout>
     <ion-header class="header">
-      <ion-toolbar color="secodary">
+      <ion-toolbar>
         <ion-buttons slot="start">
           <ion-button @click="goBack()" v-if="viewIndex !== 0">
             <ion-icon :icon="chevronBack" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title v-if="all_stops">{{
-            all_stops[viewIndex]?.name
-          }}</ion-title>
+        <ion-title v-if="all_stops">{{ all_stops[viewIndex]?.name }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="goForward()" v-if="all_stops && viewIndex !== all_stops.length - 1 && all_stops[viewIndex + 1]">
-            <p v-if="viewIndex === stopIndex">{{ all_stops[viewIndex+1].name }}</p>
+          <ion-button @click="goForward()" v-if="all_stops &&
+            viewIndex !== all_stops?.length - 1 &&
+            all_stops[viewIndex + 1]
+            ">
+            <p v-if="viewIndex === stopIndex">
+              {{ all_stops[viewIndex + 1]?.name }}
+            </p>
             <ion-icon v-if="viewIndex < stopIndex" :icon="chevronForward" slot="icon-only"></ion-icon>
           </ion-button>
-          <ion-button v-if="viewIndex === all_stops?.length - 1" @click="send()">arriva</ion-button>
+          <ion-button v-if="all_stops && viewIndex === all_stops?.length - 1" @click="send()">arriva</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -155,7 +170,7 @@ if (routeId && !all_stops.value) {
         <div v-for="passenger in all_stops[viewIndex]?.passengerList" :key="passenger">
           <ion-item v-if="passenger.onBoard === false">
             <ion-label>{{ passenger.passenger }}</ion-label>
-            <button class="addButton" @click="handleAdd(passenger.passenger)">
+            <button class="childButton" @click="handleAdd(passenger.passenger)">
               <ion-icon :icon="addOutline" slot="end"></ion-icon>
             </button>
           </ion-item>
@@ -179,7 +194,7 @@ if (routeId && !all_stops.value) {
               <div v-for="passenger in stop.passengerList" :key="passenger">
                 <ion-item v-if="passenger.onBoard === true">
                   <ion-label>{{ passenger.passenger }}</ion-label>
-                  <button class="addButton" @click="handleRemove(passenger.passenger)">
+                  <button class="childButton" @click="handleRemove(passenger.passenger)">
                     <ion-icon :icon="removeOutline" slot="end"></ion-icon>
                   </button>
                 </ion-item>
@@ -193,7 +208,7 @@ if (routeId && !all_stops.value) {
 </template>
 
 <style>
-.addButton {
+.childButton {
   padding: 5px;
   border-radius: 5px;
   background: #3880ff;

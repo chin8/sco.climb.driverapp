@@ -2,14 +2,14 @@ import axios from "axios";
 import { defineStore } from "pinia";
 
 interface State {
-  child: null;
+  child: any[];
   loading: boolean;
   error: null | unknown;
 }
 
 export const useChildStore = defineStore("childStore", {
   state: (): State => ({
-    child: null,
+    child: [],
     loading: false,
     error: null,
   }),

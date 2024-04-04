@@ -5,7 +5,7 @@ interface State {
   routes: null;
   loading: boolean;
   error: null | unknown;
-  selectedRoute: null | string;
+  selectedRoute: null | object;
 }
 
 export const useRouteStore = defineStore("routeStore", {
@@ -32,8 +32,9 @@ export const useRouteStore = defineStore("routeStore", {
         this.loading = false;
       }
     },
-    selected(selected: string){
+    selected(selected: object){
       this.selectedRoute = selected;
+      console.log(this.selectedRoute)
     }
   },
 });
