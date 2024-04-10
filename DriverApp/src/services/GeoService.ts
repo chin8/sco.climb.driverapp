@@ -1,7 +1,7 @@
-import { Geolocation } from '@capacitor/geolocation';
+import { Geolocation, Position } from '@capacitor/geolocation';
 
-var watchId = null;
-var currentPosition:any = null;
+let watchId: any | null;
+let currentPosition: Position | null = null;
 
 const geolocalize = () => {
     const options = {
@@ -16,9 +16,9 @@ const geolocalize = () => {
     });
 }
 
-var geoInterval = null;
+let geoInterval: string | number | NodeJS.Timeout | null | undefined = null;
 
-const startWatchingPosition = (successCb, errorCb, delay) => {
+const startWatchingPosition = (successCb: any, errorCb: any, delay: any) => {
     if (!watchId) {
         geolocalize();
     }
@@ -43,21 +43,20 @@ const stopWatchingPosition = () => {
         watchId = null;
     }
 
-    if (!!geoInterval) {
+    if (geoInterval) {
         clearInterval(geoInterval);
         geoInterval = null;
     }
 }
 
 
-const geolocalizeEvent = async (event) => {
+const geolocalizeEvent = async (event: any) => {
     try {
     //   var position = currentPosition;
     } catch (error) {
       console.error("Error getting current position:", error);
       throw error;
     }
-    console.log(currentPosition);
     if (currentPosition) {
       event.payload['latitude'] = currentPosition.coords.latitude;
       event.payload['longitude'] = currentPosition.coords.longitude;

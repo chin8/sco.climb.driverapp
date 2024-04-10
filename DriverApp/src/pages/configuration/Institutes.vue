@@ -1,25 +1,18 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useInstituteStore } from "../../store/institute";
 import {
   IonList,
-  IonListHeader,
   IonItem,
   IonLabel,
   IonIcon,
-  IonHeader,
-  IonButtons,
-  IonButton,
   IonSpinner
 } from "@ionic/vue";
-import { arrowBack, chevronForward } from "ionicons/icons";
-import { defineComponent } from "vue";
-import { all } from "axios";
+import { chevronForward } from "ionicons/icons";
 
-const { all_institutes, loading, error, selectedInstitute } = storeToRefs(
+const { all_institutes, loading, error } = storeToRefs(
   useInstituteStore()
 );
 const { fetchInstitutes, selected } = useInstituteStore();

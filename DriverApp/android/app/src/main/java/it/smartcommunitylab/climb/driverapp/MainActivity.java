@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package it.smartcommunitylab.climb.driverapp;
 
 import com.getcapacitor.BridgeActivity;
 

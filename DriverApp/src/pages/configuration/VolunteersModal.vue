@@ -6,31 +6,31 @@ import {
   IonListHeader,
   IonButton,
   IonModal,
-  IonHeader,
   IonContent,
-  IonToolbar,
   IonTitle,
   IonItem,
   IonList,
-  IonAvatar,
-  IonImg,
   IonLabel,
   IonCheckbox,
-  IonFooter,
+  IonIcon
 } from "@ionic/vue";
+import {
+  addOutline
+} from "ionicons/icons";
+
 import { ref } from "vue";
 import { useVolunteersStore } from "../../store/volunteers";
 import { useSchoolStore } from "../../store/school";
 import { useInstituteStore } from "../../store/institute";
 
-const { fetchVolunteers, selected, delete_selected } = useVolunteersStore();
-const { all_volunteers, loading, error, selectedVolunteers } = storeToRefs(
+const { fetchVolunteers, selected } = useVolunteersStore();
+const { all_volunteers, selectedVolunteers } = storeToRefs(
   useVolunteersStore()
 );
 const { selectedSchool } = storeToRefs(useSchoolStore());
 const { selectedInstitute } = storeToRefs(useInstituteStore());
 
-let modalInputs = [];
+let modalInputs: any[] = [];
 
 const modal = ref();
 
@@ -38,8 +38,8 @@ const cancel = () => {
   modal.value.$el.dismiss(null, "cancel");
   if (selectedVolunteers && selectedVolunteers.value) {
     modalInputs.forEach((input) => {
-      input.checked = selectedVolunteers.value.some(
-        (selected) => selected.objectId === input.value.objectId
+      input.checked = selectedVolunteers.value?.some(
+        (selected: { objectId: any; }) => selected.objectId === input.value.objectId
       );
     });
   }
@@ -53,10 +53,12 @@ const confirm = () => {
   selected(selectedVolunteers);
 };
 
+defineProps(['pageTitle']);
+
 onMounted(async () => {
   await fetchVolunteers(
-    selectedInstitute.value.objectId,
-    selectedSchool.value.objectId
+    selectedInstitute.value?.objectId,
+    selectedSchool.value?.objectId
   );
 
   if (all_volunteers.value) {
@@ -71,17 +73,19 @@ onMounted(async () => {
         };
       });
     }
+    cancel();
   }
 });
 </script>
 
 <template>
-  <div class="ion-padding-top">
-    <ion-list-header>
-      <ion-label>Volontari</ion-label>
-      <ion-button id="open-modal">Seleziona</ion-button>
+  <div>
+    <ion-list-header v-if="pageTitle === 'volunteers'">
+      <ion-label>Volontari selezionati</ion-label>
+      <ion-button v-if="pageTitle === 'volunteers'" id="open-modal-volunteers"><ion-icon slot="start" :icon="addOutline"></ion-icon>Aggiungi</ion-button>
     </ion-list-header>
-    <ion-modal ref="modal" trigger="open-modal">
+    <ion-button v-if="pageTitle === 'stops'" id="open-modal-stops"><ion-icon slot="start" :icon="addOutline"></ion-icon>Volontari</ion-button>
+    <ion-modal ref="modal" :trigger="pageTitle === 'volunteers' ? 'open-modal-volunteers' : 'open-modal-stops'">
       <div class="ion-padding-left ion-padding-right ion-padding-top">
         <ion-title>Volontari</ion-title>
       </div>

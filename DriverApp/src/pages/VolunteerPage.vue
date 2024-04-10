@@ -4,7 +4,6 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useVolunteerStore } from "../store/volunteer";
 import Volunteer from "../components/volunteers/Volunteer.vue";
-import { IonContent, IonPage } from "@ionic/vue";
 
 const route = useRoute();
 const { volunteers } = storeToRefs(useVolunteerStore());

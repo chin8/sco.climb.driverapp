@@ -34,7 +34,6 @@ export const useRouteStore = defineStore("routeStore", {
     },
     selected(selected: object){
       this.selectedRoute = selected;
-      console.log(this.selectedRoute)
     }
   },
 });

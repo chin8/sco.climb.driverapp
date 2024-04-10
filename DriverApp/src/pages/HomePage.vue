@@ -1,14 +1,11 @@
 <script setup>
-import { IonButton, IonContent, IonPage, IonSelect, IonSelectOption, IonCard,IonCardHeader, IonCardContent } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { IonButton, IonSelect, IonSelectOption, IonCard,IonCardHeader, IonCardContent } from "@ionic/vue";
 import { useRouter } from "vue-router";
 import { ref } from 'vue'
   import { useI18n } from "vue-i18n"
   import i18n from "../plugins/i18n";
-  import { Field } from 'vee-validate'
   import { setLocale } from '@vee-validate/i18n'
   import { Auth } from '@/services/AuthService';
-  import { Subscription } from 'rxjs';
   import { AuthActions } from "ionic-appauth";
 
   const selected = ref('')
@@ -30,8 +27,9 @@ const changeLocale = (locale) => {
 const router = useRouter();
 const apiserver = import.meta.env.VITE_SERVER_URL;
 let userLocal= ref('');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let event= ref('');
-let subs  =ref([]);
+const subs  =ref([]);
 let tokenLocal = ref("");
 
     subs.value.push(

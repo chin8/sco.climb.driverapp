@@ -25,7 +25,6 @@ export const useStopsStore = defineStore("useStopsStore", {
       this.loading = true;
       try {
         const fetchedData = await axios.get(import.meta.env.VITE_SERVER_URL+'/stop/TEST/'+routeId);
-        console.log(fetchedData);
         const stopsWithModifiedPassengerList = fetchedData.data.map((stop: any) => ({
           ...stop,
           passengerList: stop.passengerList.map((passenger: string) => ({

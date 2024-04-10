@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
@@ -7,19 +6,14 @@ import { useSchoolStore } from "../../store/school";
 import { useInstituteStore } from "../../store/institute";
 import {
   IonList,
-  IonListHeader,
   IonItem,
   IonLabel,
   IonIcon,
-  IonHeader,
-  IonButtons,
-  IonButton,
   IonSpinner
 } from "@ionic/vue";
-import { arrowBack, chevronForward } from "ionicons/icons";
-import { defineComponent } from "vue";
+import { chevronForward } from "ionicons/icons";
 
-const { all_schools, loading, error, selectedSchool } = storeToRefs(
+const { all_schools, loading, error } = storeToRefs(
   useSchoolStore()
 );
 const { selectedInstitute } = storeToRefs(

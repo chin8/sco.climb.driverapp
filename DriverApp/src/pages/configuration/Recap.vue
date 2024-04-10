@@ -1,15 +1,10 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, computed } from "vue";
+import { onMounted } from "vue";
 import {
   IonList,
-  IonListHeader,
   IonItem,
   IonLabel,
-  IonIcon,
-  IonHeader,
-  IonButtons,
   IonButton,
   IonNote
 } from "@ionic/vue";

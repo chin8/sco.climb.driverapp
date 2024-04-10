@@ -1,8 +1,7 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useVolunteerStore } from "../store";
-import {  IonContent, IonPage, IonItem } from '@ionic/vue';
+import {  IonItem } from '@ionic/vue';
 import { useRouter } from "vue-router";
 const { volunteers, loading, error } = storeToRefs(useVolunteerStore());
 const { fetchVolunteers } = useVolunteerStore();

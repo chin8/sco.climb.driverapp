@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {
+  IonPage,
   IonButtons,
   IonButton,
   IonModal,
@@ -17,12 +18,13 @@ import {
   chevronForward,
   chevronBack,
   addOutline,
-  removeOutline,
+  removeOutline
 } from "ionicons/icons";
 import { useStopsStore } from "../store/stops";
 import { useRouteStore } from "../store/route";
 import { useEventsStore } from "../store/events";
 import { useChildStore } from "../store/child";
+import { useProfileStore } from "../store/profile";
 import { ref } from "vue";
 
 import { addEvents } from "../services/APIService";
@@ -32,7 +34,10 @@ import {
   stopWatchingPosition,
 } from "../services/GeoService";
 
+import PassengersModal from "../pages/PassengersModal.vue";
+
 const { selected_route } = storeToRefs(useRouteStore());
+const { profile } = useProfileStore();
 const { fetchStops, addOnBoard, removeOnBoard } = useStopsStore();
 const {
   nodeCheckin,
@@ -59,7 +64,7 @@ startWatchingPosition(
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       const acc = position.coords.accuracy;
-      driverPosition(routeId, "null", lat, lon, acc);
+      driverPosition(routeId, profile.objectId, lat, lon, acc);
     }
   },
   null,
@@ -110,6 +115,17 @@ const getChild = (childId: any) => {
   return foundChild;
 };
 
+const getChildName = (childId: any) => {
+  let foundChild = null;
+  for (let i = 0; i < all_child.value.length; i++) {
+    const child = all_child.value[i];
+    if (child.objectId === childId) {
+      foundChild = child;
+    }
+  }
+  return foundChild.name + " " + foundChild.surname;
+};
+
 const send = () => {
   // get onBoard
   const onBoard: any[] = [];
@@ -129,20 +145,20 @@ const send = () => {
   addEvents(routeId, events);
   endRoute(all_stops.value[stopIndex.value].objectId, routeId);
   stopWatchingPosition();
-  console.log(events);
 };
 
 const isOpen = ref(false);
 
 const setOpen = (open: boolean) => (isOpen.value = open);
 
-if (routeId) {
+if (routeId && all_stops.value.length == 0) {
   fetchStops(routeId);
 }
 </script>
 
 <template>
   <base-layout>
+  <ion-page>
     <ion-header class="header">
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -155,7 +171,7 @@ if (routeId) {
           <ion-button @click="goForward()" v-if="all_stops &&
             viewIndex !== all_stops?.length - 1 &&
             all_stops[viewIndex + 1]
-            ">
+          ">
             <p v-if="viewIndex === stopIndex">
               {{ all_stops[viewIndex + 1]?.name }}
             </p>
@@ -169,7 +185,7 @@ if (routeId) {
       <ion-list>
         <div v-for="passenger in all_stops[viewIndex]?.passengerList" :key="passenger">
           <ion-item v-if="passenger.onBoard === false">
-            <ion-label>{{ passenger.passenger }}</ion-label>
+            <ion-label>{{ getChildName(passenger.passenger) }}</ion-label>
             <button class="childButton" @click="handleAdd(passenger.passenger)">
               <ion-icon :icon="addOutline" slot="end"></ion-icon>
             </button>
@@ -184,7 +200,8 @@ if (routeId) {
           <ion-toolbar>
             <ion-title>A bordo</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="setOpen(false)">Close</ion-button>
+              <PassengersModal />
+              <!-- <ion-button @click="setOpen(false)">Close</ion-button> -->
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
@@ -193,7 +210,7 @@ if (routeId) {
             <div v-for="stop in all_stops" :key="stop">
               <div v-for="passenger in stop.passengerList" :key="passenger">
                 <ion-item v-if="passenger.onBoard === true">
-                  <ion-label>{{ passenger.passenger }}</ion-label>
+                  <ion-label>{{ getChildName(passenger.passenger) }}</ion-label>
                   <button class="childButton" @click="handleRemove(passenger.passenger)">
                     <ion-icon :icon="removeOutline" slot="end"></ion-icon>
                   </button>
@@ -204,7 +221,8 @@ if (routeId) {
         </ion-content>
       </ion-modal>
     </ion-content>
-  </base-layout>
+  </ion-page>
+</base-layout>
 </template>
 
 <style>

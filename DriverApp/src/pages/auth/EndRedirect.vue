@@ -1,7 +1,6 @@
   <script setup>
   import { Auth } from '../../services/AuthService';
   import { IonPage } from '@ionic/vue';
-  import { defineComponent } from 'vue';
   import { useRouter } from "vue-router";
 
   const router = useRouter();
