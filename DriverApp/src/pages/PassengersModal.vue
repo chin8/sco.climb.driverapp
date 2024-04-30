@@ -6,13 +6,13 @@ import { useChildStore } from "../store/child";
 import { IonButton, IonModal, IonTitle, IonContent, IonList, IonItem, IonButtons, IonCheckbox, IonIcon } from "@ionic/vue";
 import { addOutline } from "ionicons/icons";
 
-const { all_stops } = useStopsStore();
 const { all_child } = storeToRefs(useChildStore());
+const { all_stops } = storeToRefs(useStopsStore());
 
 const modal = ref();
 
 const cancel = () => {
-    all_stops.forEach(stop => {
+    all_stops.value.forEach(stop => {
         stop.passengerList.forEach(passenger => {
             passenger.checked = false;
         });
@@ -22,7 +22,7 @@ const cancel = () => {
 };
 
 const confirm = () => {
-    all_stops.forEach(stop => {
+    all_stops.value.forEach(stop => {
         stop.passengerList.forEach(passenger => {
             if (passenger.checked) {
                 passenger.onBoard = true;

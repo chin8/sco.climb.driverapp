@@ -82,9 +82,11 @@ onMounted(async () => {
   <div>
     <ion-list-header v-if="pageTitle === 'volunteers'">
       <ion-label>Volontari selezionati</ion-label>
-      <ion-button v-if="pageTitle === 'volunteers'" id="open-modal-volunteers"><ion-icon slot="start" :icon="addOutline"></ion-icon>Aggiungi</ion-button>
+      <ion-button id="open-modal-volunteers"><ion-icon slot="start" :icon="addOutline"></ion-icon>Aggiungi</ion-button>
     </ion-list-header>
+
     <ion-button v-if="pageTitle === 'stops'" id="open-modal-stops"><ion-icon slot="start" :icon="addOutline"></ion-icon>Volontari</ion-button>
+
     <ion-modal ref="modal" :trigger="pageTitle === 'volunteers' ? 'open-modal-volunteers' : 'open-modal-stops'">
       <div class="ion-padding-left ion-padding-right ion-padding-top">
         <ion-title>Volontari</ion-title>

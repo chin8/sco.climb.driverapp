@@ -15,6 +15,7 @@ import { filter, switchMap, take } from 'rxjs/operators';
 import Login from '../pages/auth/LoginPage.vue'
 import Redirect from '../pages/auth/Redirect.vue'
 import EndRedirect from '../pages/auth/EndRedirect.vue'
+import EditConfig from '../pages/EditConfig.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -75,6 +76,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/stops',
     component: Stops
+  },
+  {
+    path: '/editConfig',
+    component: EditConfig
   }
 ]
 

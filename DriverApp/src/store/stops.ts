@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 interface State {
   stops: any[];
   onBoard: any[];
+  menu_layout: boolean;
   loading: boolean;
   error: null | unknown;
 }
@@ -13,13 +14,14 @@ export const useStopsStore = defineStore("useStopsStore", {
   state: (): State => ({
     stops: [],
     onBoard: [],
+    menu_layout: false,
     loading: false,
     error: null,
   }),
   getters: {
     all_stops: (state) => state.stops,
-    the_error: (state) => state.error,
-  },
+    the_error: (state) => state.error
+    },
   actions: {
     async fetchStops(routeId: string) {
       this.loading = true;
@@ -38,7 +40,7 @@ export const useStopsStore = defineStore("useStopsStore", {
       } finally {
         this.loading = false;
       }
-    },    
+    },
     addOnBoard(passenger: string) {
       this.stops?.forEach(stop => {
         stop.passengerList.forEach((item: any) => {
@@ -47,7 +49,7 @@ export const useStopsStore = defineStore("useStopsStore", {
           }
         });
       });
-    },    
+    },
     removeOnBoard(passenger: string) {
       this.stops?.forEach(stop => {
         stop.passengerList.forEach((item: any) => {
@@ -56,6 +58,9 @@ export const useStopsStore = defineStore("useStopsStore", {
           }
         });
       });
+    },
+    changeLayout() {
+      this.menu_layout = true;
     }
   },
 });

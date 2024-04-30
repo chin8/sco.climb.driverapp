@@ -16,12 +16,14 @@ import { useVolunteersStore } from "../../store/volunteers";
 import { useProfileStore } from "../../store/profile";
 import { useEventsStore } from "../../store/events";
 import { useChildStore } from "../../store/child";
+import { useStopsStore } from "../../store/stops";
 
 const { selectedInstitute, all_institutes } = storeToRefs(useInstituteStore());
 const { selectedSchool, all_schools } = storeToRefs(useSchoolStore());
 const { selectedRoute, all_routes } = storeToRefs(useRouteStore());
 const { selectedVolunteers } = storeToRefs(useVolunteersStore());
 const { profile } = storeToRefs(useProfileStore());
+const { changeLayout } = useStopsStore();
 const { fetchChild } = useChildStore();
 
 const { fetchProfile } = useProfileStore();
@@ -44,7 +46,8 @@ const helpers = () => {
 const handleStart = async () => {
   await setDriver(profile.value.objectId, selectedRoute.value.objectId);
   helpers();
-  await router.push({ path: '/stops' });
+  changeLayout();
+  await router.push({  path: '/stops' , replace: true })
 }
 </script>
 

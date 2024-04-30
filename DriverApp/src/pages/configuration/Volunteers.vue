@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import VolunteersModal from "./VolunteersModal.vue";
 import {
   IonList,
+  IonPage,
   IonItem,
   IonLabel,
   IonButton,
@@ -22,23 +23,26 @@ const router = useRouter();
 </script>
 
 <template>
-  <base-layout page-title="Configurazione Percorso" page-default-back-link="/routes">
-    <div>
-      <p v-if="loading">Loading...</p>
-      <p v-if="error">{{ error.message }}</p>
-      <VolunteersModal page-title="volunteers" />
+  <ion-page>
+    <base-layout page-title="Configurazione Percorso" page-default-back-link="/routes">
+      <div>
+        <p v-if="loading">Loading...</p>
+        <p v-if="error">{{ error.message }}</p>
+        <VolunteersModal page-title="volunteers" />
 
-      <ion-list v-if="selectedVolunteers">
+        <ion-list v-if="selectedVolunteers">
           <ion-item v-for="volunteer in selectedVolunteers" :key="volunteer.objectId">
-          <ion-label>{{ volunteer.name }}</ion-label>
-        </ion-item>
-      </ion-list>
-      <div class="ion-padding">
-        <ion-button expand="full" class="ion-margin-top" fill="solid"
-          v-if="selectedVolunteers && selectedVolunteers.length > 0" @click="router.push('/recap')">Conferma</ion-button>
+            <ion-label>{{ volunteer.name }}</ion-label>
+          </ion-item>
+        </ion-list>
+        <div class="ion-padding">
+          <ion-button expand="full" class="ion-margin-top" fill="solid"
+            v-if="selectedVolunteers && selectedVolunteers.length > 0"
+            @click="router.push('/recap')">Conferma</ion-button>
+        </div>
       </div>
-    </div>
-  </base-layout>
+    </base-layout>
+  </ion-page>
 </template>
 
 <style>

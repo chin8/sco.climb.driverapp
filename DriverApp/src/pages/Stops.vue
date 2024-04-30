@@ -29,6 +29,9 @@ import { ref } from "vue";
 
 import { addEvents } from "../services/APIService";
 
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 import {
   startWatchingPosition,
   stopWatchingPosition,
@@ -49,7 +52,6 @@ const {
   endRoute,
   events,
 } = useEventsStore();
-
 const { all_child } = storeToRefs(useChildStore());
 const { all_stops } = storeToRefs(useStopsStore());
 
@@ -147,82 +149,86 @@ const send = () => {
   stopWatchingPosition();
 };
 
-const isOpen = ref(false);
-
-const setOpen = (open: boolean) => (isOpen.value = open);
-
 if (routeId && all_stops.value.length == 0) {
   fetchStops(routeId);
 }
+
 </script>
 
 <template>
-  <base-layout>
   <ion-page>
-    <ion-header class="header">
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button @click="goBack()" v-if="viewIndex !== 0">
-            <ion-icon :icon="chevronBack" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title v-if="all_stops">{{ all_stops[viewIndex]?.name }}</ion-title>
-        <ion-buttons slot="end">
-          <ion-button @click="goForward()" v-if="all_stops &&
-            viewIndex !== all_stops?.length - 1 &&
-            all_stops[viewIndex + 1]
-          ">
-            <p v-if="viewIndex === stopIndex">
-              {{ all_stops[viewIndex + 1]?.name }}
-            </p>
-            <ion-icon v-if="viewIndex < stopIndex" :icon="chevronForward" slot="icon-only"></ion-icon>
-          </ion-button>
-          <ion-button v-if="all_stops && viewIndex === all_stops?.length - 1" @click="send()">arriva</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding" v-if="all_stops">
-      <ion-list>
-        <div v-for="passenger in all_stops[viewIndex]?.passengerList" :key="passenger">
-          <ion-item v-if="passenger.onBoard === false">
-            <ion-label>{{ getChildName(passenger.passenger) }}</ion-label>
-            <button class="childButton" @click="handleAdd(passenger.passenger)">
-              <ion-icon :icon="addOutline" slot="end"></ion-icon>
-            </button>
-          </ion-item>
+    <base-layout>
+      <ion-header>
+        <ion-item @click="router.push('/editConfig')" color="medium">
+          <ion-label>
+            Configurazione percorso
+          </ion-label>
+          <ion-icon :icon="chevronForward"></ion-icon>
+        </ion-item>
+      </ion-header>
+      <ion-header class="header">
+        <ion-toolbar color="light">
+          <ion-buttons slot="start">
+            <ion-button @click="goBack()" v-if="viewIndex !== 0">
+              <ion-icon :icon="chevronBack" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title v-if="all_stops">{{ all_stops[viewIndex]?.name }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="goForward()" v-if="all_stops &&
+              viewIndex !== all_stops?.length - 1 &&
+              all_stops[viewIndex + 1]
+            ">
+              <p v-if="viewIndex === stopIndex">
+                {{ all_stops[viewIndex + 1]?.name }}
+              </p>
+              <ion-icon v-if="viewIndex < stopIndex" :icon="chevronForward" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button v-if="all_stops && viewIndex === all_stops?.length - 1" @click="send()">arriva</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" v-if="all_stops">
+        <ion-list>
+          <div v-for="passenger in all_stops[viewIndex]?.passengerList" :key="passenger">
+            <ion-item v-if="passenger.onBoard === false">
+              <ion-label>{{ getChildName(passenger.passenger) }}</ion-label>
+              <button class="childButton" @click="handleAdd(passenger.passenger)">
+                <ion-icon :icon="addOutline" slot="end"></ion-icon>
+              </button>
+            </ion-item>
+          </div>
+        </ion-list>
+        <div class="ion-padding-top">
         </div>
-      </ion-list>
-      <div class="ion-padding-top">
-        <ion-button expand="block" @click="setOpen(true)">Bamibini a bordo</ion-button>
-      </div>
-      <ion-modal :is-open="isOpen" :initial-breakpoint="1" :breakpoints="[0, 1]" @ionModalDidDismiss="setOpen(false)">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>A bordo</ion-title>
-            <ion-buttons slot="end">
-              <PassengersModal />
-              <!-- <ion-button @click="setOpen(false)">Close</ion-button> -->
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <ion-list>
-            <div v-for="stop in all_stops" :key="stop">
-              <div v-for="passenger in stop.passengerList" :key="passenger">
-                <ion-item v-if="passenger.onBoard === true">
-                  <ion-label>{{ getChildName(passenger.passenger) }}</ion-label>
-                  <button class="childButton" @click="handleRemove(passenger.passenger)">
-                    <ion-icon :icon="removeOutline" slot="end"></ion-icon>
-                  </button>
-                </ion-item>
+        <ion-modal v-if="router.currentRoute.value.path === '/stops'" :is-open="true" :initial-breakpoint="0.25"
+          :breakpoints="[0.25, 0.5, 0.75]" :backdrop-dismiss="false" :backdrop-breakpoint="0.5">
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Bambini a bordo</ion-title>
+              <ion-buttons slot="end">
+                <PassengersModal />
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <ion-list>
+              <div v-for="stop in all_stops" :key="stop">
+                <div v-for="passenger in stop.passengerList" :key="passenger">
+                  <ion-item v-if="passenger.onBoard === true">
+                    <ion-label>{{ getChildName(passenger.passenger) }}</ion-label>
+                    <button class="childButton" @click="handleRemove(passenger.passenger)">
+                      <ion-icon :icon="removeOutline" slot="end"></ion-icon>
+                    </button>
+                  </ion-item>
+                </div>
               </div>
-            </div>
-          </ion-list>
-        </ion-content>
-      </ion-modal>
-    </ion-content>
+            </ion-list>
+          </ion-content>
+        </ion-modal>
+      </ion-content>
+    </base-layout>
   </ion-page>
-</base-layout>
 </template>
 
 <style>
