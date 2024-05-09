@@ -9,7 +9,8 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonSpinner
+  IonSpinner,
+  IonPage
 } from "@ionic/vue";
 import { chevronForward } from "ionicons/icons";
 
@@ -38,6 +39,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <ion-page>
   <base-layout
     page-title="Configurazione Percorso"
     page-default-back-link="/institutes"
@@ -63,4 +65,5 @@ onMounted(async () => {
       </div>
     </div>
   </base-layout>
+</ion-page>
 </template>

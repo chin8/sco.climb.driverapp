@@ -24,12 +24,17 @@ defineProps(['pageTitle', 'pageDefaultBackLink']);
 
 import { useStopsStore } from "../../store/stops";
 const { menu_layout } = storeToRefs(useStopsStore());
+const { toggleModal } = useStopsStore();
+
+const toggle_modal = () => {
+  toggleModal()
+}
 </script>
 
 <template>
   <div>
     <!-- menu -->
-    <ion-menu v-if="menu_layout" content-id="main-content">
+    <ion-menu v-if="menu_layout" @ionWillClose="toggle_modal()" @ionWillOpen="toggle_modal()" content-id="main-content">
       <ion-header>
         <ion-toolbar>
           <ion-title>Nome Cognome</ion-title>

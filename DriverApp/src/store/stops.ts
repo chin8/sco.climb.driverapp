@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 interface State {
   stops: any[];
   onBoard: any[];
+  isOpen: boolean;
   menu_layout: boolean;
   loading: boolean;
   error: null | unknown;
@@ -14,13 +15,15 @@ export const useStopsStore = defineStore("useStopsStore", {
   state: (): State => ({
     stops: [],
     onBoard: [],
+    isOpen: true,
     menu_layout: false,
     loading: false,
     error: null,
   }),
   getters: {
     all_stops: (state) => state.stops,
-    the_error: (state) => state.error
+    the_error: (state) => state.error,
+    is_open: (state) => state.isOpen
     },
   actions: {
     async fetchStops(routeId: string) {
@@ -61,6 +64,9 @@ export const useStopsStore = defineStore("useStopsStore", {
     },
     changeLayout() {
       this.menu_layout = true;
-    }
+    },
+    toggleModal() {
+      this.isOpen = !this.isOpen;
+    },
   },
 });

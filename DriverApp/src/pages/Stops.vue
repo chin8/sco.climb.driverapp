@@ -53,7 +53,7 @@ const {
   events,
 } = useEventsStore();
 const { all_child } = storeToRefs(useChildStore());
-const { all_stops } = storeToRefs(useStopsStore());
+const { all_stops, is_open } = storeToRefs(useStopsStore());
 
 const viewIndex = ref(0);
 const stopIndex = ref(0);
@@ -152,7 +152,6 @@ const send = () => {
 if (routeId && all_stops.value.length == 0) {
   fetchStops(routeId);
 }
-
 </script>
 
 <template>
@@ -201,8 +200,9 @@ if (routeId && all_stops.value.length == 0) {
         </ion-list>
         <div class="ion-padding-top">
         </div>
-        <ion-modal v-if="router.currentRoute.value.path === '/stops'" :is-open="true" :initial-breakpoint="0.25"
-          :breakpoints="[0.25, 0.5, 0.75]" :backdrop-dismiss="false" :backdrop-breakpoint="0.5">
+        <ion-modal v-if="router.currentRoute.value.path === '/stops' && is_open" :is-open="true"
+          :initial-breakpoint="0.25" :breakpoints="[0.25, 0.5, 0.75]" :backdrop-dismiss="false"
+          :backdrop-breakpoint="0.5">
           <ion-header>
             <ion-toolbar>
               <ion-title>Bambini a bordo</ion-title>

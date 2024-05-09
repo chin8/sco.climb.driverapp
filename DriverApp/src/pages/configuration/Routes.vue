@@ -10,7 +10,8 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonSpinner
+  IonSpinner,
+  IonPage
 } from "@ionic/vue";
 import { chevronForward } from "ionicons/icons";
 
@@ -40,29 +41,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <base-layout
-    page-title="Configurazione Percorso"
-    page-default-back-link="/schools"
-  >
-    <div>
-      <p v-if="loading">Loading...</p>
-      <p v-if="error">{{ error.message }}</p>
-      <div v-if="all_routes && all_routes.length < 2" class="ion-padding ion-text-center">
-        <ion-spinner class="ion-padding-top"></ion-spinner>
-        <ion-label class="ion-padding">Autoselezione della linea...</ion-label>
-      </div> 
-      <div v-if="all_routes && all_routes.length > 1">
-        <ion-list>
-          <ion-item
-            v-for="route in all_routes"
-            :key="route.objectId"
-            @click="selected(route), router.push('/volunteers')"
-          >
-            <ion-label>{{ route.name }}</ion-label>
-            <ion-icon :icon="chevronForward" slot="end"></ion-icon>
-          </ion-item>
-        </ion-list>
+  <ion-page>
+    <base-layout page-title="Configurazione Percorso" page-default-back-link="/schools">
+      <div>
+        <p v-if="loading">Loading...</p>
+        <p v-if="error">{{ error.message }}</p>
+        <div v-if="all_routes && all_routes.length < 2" class="ion-padding ion-text-center">
+          <ion-spinner class="ion-padding-top"></ion-spinner>
+          <ion-label class="ion-padding">Autoselezione della linea...</ion-label>
+        </div>
+        <div v-if="all_routes && all_routes.length > 1">
+          <ion-list>
+            <ion-item v-for="route in all_routes" :key="route.objectId"
+              @click="selected(route), router.push('/volunteers')">
+              <ion-label>{{ route.name }}</ion-label>
+              <ion-icon :icon="chevronForward" slot="end"></ion-icon>
+            </ion-item>
+          </ion-list>
+        </div>
       </div>
-    </div>
-  </base-layout>
+    </base-layout>
+  </ion-page>
 </template>
