@@ -62,6 +62,13 @@ const app = createApp(App)
     }
     return config
   })
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response.status === 403) {
+        window.location.href = '/login';
+      }
+    });
 app.component('base-layout', BaseLayout);
 router.isReady().then(() => {
   app.mount('#app');

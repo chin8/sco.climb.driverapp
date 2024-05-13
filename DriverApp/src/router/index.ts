@@ -20,7 +20,7 @@ import EditConfig from '../pages/EditConfig.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/Institutes'
   },
   {
     path: '/login',
