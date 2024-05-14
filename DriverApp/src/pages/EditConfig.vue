@@ -21,7 +21,6 @@ const { selectedVolunteers } = storeToRefs(useVolunteersStore());
 
 <template>
   <ion-page>
-  <base-layout page-title="Configurazione percorso" page-default-back-link="/volunteers">
     <div class="ion-padding-top">
       <ion-item>
         <ion-label>
@@ -53,7 +52,6 @@ const { selectedVolunteers } = storeToRefs(useVolunteersStore());
         </ion-item>
       </ion-list>
     </div>
-  </base-layout>
 </ion-page>
 </template>
 

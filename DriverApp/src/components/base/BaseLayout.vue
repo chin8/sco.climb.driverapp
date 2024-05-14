@@ -6,7 +6,6 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonBackButton,
   IonButtons,
   IonItem,
   IonIcon,
@@ -32,9 +31,9 @@ const toggle_modal = () => {
 </script>
 
 <template>
-  <div>
     <!-- menu -->
-    <ion-menu v-if="menu_layout" @ionWillClose="toggle_modal()" @ionWillOpen="toggle_modal()" content-id="main-content">
+    <ion-menu v-if="menu_layout" @ionWillClose="toggle_modal()" @ionWillOpen="toggle_modal()" menu-id="main-menu"
+      content-id="main-content">
       <ion-header>
         <ion-toolbar>
           <ion-title>Nome Cognome</ion-title>
@@ -58,27 +57,13 @@ const toggle_modal = () => {
       </ion-content>
     </ion-menu>
 
-
-    <ion-page id="main-content">
+    <ion-page>
       <ion-header v-if="menu_layout">
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
+            <ion-menu-button menu="main-menu"></ion-menu-button>
           </ion-buttons>
           <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <!-- back button -->
-      <ion-header v-if="!menu_layout">
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-back-button :default-href="pageDefaultBackLink"></ion-back-button>
-          </ion-buttons>
-          <ion-title>{{ pageTitle }}</ion-title>
-          <ion-buttons slot="end">
-            <slot name="actions-end"></slot>
-          </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
@@ -86,5 +71,4 @@ const toggle_modal = () => {
         <slot />
       </ion-content>
     </ion-page>
-  </div>
 </template>

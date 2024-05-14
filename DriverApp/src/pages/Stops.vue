@@ -156,7 +156,6 @@ if (routeId && all_stops.value.length == 0) {
 
 <template>
   <ion-page>
-    <base-layout>
       <ion-header>
         <ion-item @click="router.push('/editConfig')" color="medium">
           <ion-label>
@@ -227,7 +226,6 @@ if (routeId && all_stops.value.length == 0) {
           </ion-content>
         </ion-modal>
       </ion-content>
-    </base-layout>
   </ion-page>
 </template>
 

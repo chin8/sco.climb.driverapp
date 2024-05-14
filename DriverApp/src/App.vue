@@ -7,6 +7,8 @@ import {
 
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <base-layout>
+      <ion-router-outlet id="main-content" />
+    </base-layout>
   </ion-app>
 </template>
