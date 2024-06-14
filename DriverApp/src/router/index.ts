@@ -20,7 +20,7 @@ import EditConfig from '../pages/EditConfig.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/Institutes'
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -39,26 +39,32 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path:'/Institutes',
+    name: 'Institutes',
     component:Institutes
   },
   {
     path:'/Schools',
+    name: 'Schools',
     component:Schools
   },
   {
     path:'/Routes',
+    name: 'Routes',
     component:Routes
   },
   {
     path:'/Volunteers',
+    name: 'Volunteers',
     component:Volunteers
   },
   {
     path:'/home',
+    name: 'Home',
     component:HomePage
   },
   {
     path:'/recap',
+    name: 'Recap',
     component:Recap
   },
   {
@@ -75,10 +81,12 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/stops',
+    name: 'Stops',
     component: Stops
   },
   {
     path: '/editConfig',
+    name: 'EditConfig',
     component: EditConfig
   }
 ]
@@ -87,14 +95,34 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
+// router.beforeEach((to, from, next) => {
+//   if (to.name !== 'Login') {
+//     Auth.Instance.initComplete$.pipe(
+//       filter(complete => complete===true),
+//       switchMap(() => Auth.Instance.isAuthenticated$),
+//       take(1))
+//       .subscribe((isAuthenticated:boolean) => {
+//         if (isAuthenticated) {
+//           next();
+//         } else {
+//           next({path: '/login'})
+//         }
+//       });
+//   } else {
+//     next();
+//   }
+// })
+
 router.beforeEach((to, from, next) => {
-  if (to.name === 'Home') {
+  if (to.name !== 'Login') {
     Auth.Instance.initComplete$.pipe(
       filter(complete => complete===true),
       switchMap(() => Auth.Instance.isAuthenticated$),
       take(1))
       .subscribe((isAuthenticated:boolean) => {
         if (isAuthenticated) {
+          next();
+        } else if (to.name === 'Redirect') {
           next();
         } else {
           next({path: '/login'})
@@ -104,4 +132,6 @@ router.beforeEach((to, from, next) => {
     next();
   }
 })
+
+
 export default router

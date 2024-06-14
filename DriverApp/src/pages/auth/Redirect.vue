@@ -14,11 +14,11 @@ onBeforeUnmount(() => {
 let sub = ref(Subscription.EMPTY);
 sub = Auth.Instance.events$.subscribe((action) => {
   if (action.action === AuthActions.SignInSuccess) {
-  setTimeout(() => router.push("/Institutes"), 2500);
+  setTimeout(() => router.push({ path: '/Institutes', replace: true, transition: false }), 2500);
   }
 
   if (action.action === AuthActions.SignInFailed) {
-    setTimeout(() => router.push("/login"), 2500);
+    setTimeout(() => router.push({ path: '/Login', replace: true, transition: false }), 2500);
   }
 });
 

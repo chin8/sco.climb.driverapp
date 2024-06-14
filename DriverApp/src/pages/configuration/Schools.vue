@@ -67,7 +67,7 @@ onMounted(async () => {
       <div v-if="all_schools && all_schools.length > 1">
         <ion-list>
           <ion-item v-for="school in all_schools" :key="school.objectId"
-            @click="selected(school), router.push('/routes')">
+            @click="selected(school), router.push({ path: '/routes', replace: true, transition: false });">
             <ion-label>{{ school.name }}</ion-label>
             <ion-icon :icon="chevronForward" slot="end"></ion-icon>
           </ion-item>

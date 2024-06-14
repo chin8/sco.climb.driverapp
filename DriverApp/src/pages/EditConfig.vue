@@ -4,7 +4,7 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonPage
+  IonPage,
 } from "@ionic/vue";
 import { useInstituteStore } from "../store/institute";
 import { useSchoolStore } from "../store/school";

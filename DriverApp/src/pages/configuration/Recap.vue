@@ -54,7 +54,7 @@ const handleStart = async () => {
   await setDriver(profile.value.objectId, selectedRoute.value.objectId);
   helpers();
   changeLayout();
-  await router.push({ path: '/stops', replace: true })
+  await router.push({ path: '/stops', replace: true, transition: false });
 }
 </script>
 
@@ -78,7 +78,7 @@ const handleStart = async () => {
           <p>Institute</p>
           <h2>{{ selectedInstitute.name }}</h2>
         </ion-label>
-        <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.go(-4)"
+        <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.push({ path: '/institutes', replace: true, transition: false });"
           v-if="all_institutes && all_institutes.length > 1">Modifica</ion-note>
       </ion-item>
       <ion-item>
@@ -86,7 +86,7 @@ const handleStart = async () => {
           <p>School</p>
           <h2>{{ selectedSchool.name }}</h2>
         </ion-label>
-        <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.go(-3)"
+        <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.push({ path: '/schools', replace: true, transition: false });"
           v-if="all_schools && all_schools.length > 1">Modifica</ion-note>
       </ion-item>
       <ion-item>
@@ -94,7 +94,7 @@ const handleStart = async () => {
           <p>Routes</p>
           <h2>{{ selectedRoute.name }}</h2>
         </ion-label>
-        <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.go(-2)"
+        <ion-note slot="end" class="ion-margin-top ion-margin-bottom" @click="router.push({ path: '/routes', replace: true, transition: false });"
           v-if="all_routes && all_routes.length > 1">Modifica</ion-note>
       </ion-item>
       <ion-list>
@@ -102,7 +102,7 @@ const handleStart = async () => {
           <ion-label>
             <p>Volunteers</p>
           </ion-label>
-          <ion-note slot="end" class="ion-margin-bottom" @click="router.go(-1)">Modifica</ion-note>
+          <ion-note slot="end" class="ion-margin-bottom" @click="router.push({ path: '/volunteers', replace: true, transition: false });">Modifica</ion-note>
         </ion-item>
         <ion-item v-for="volunteer in selectedVolunteers" :key="volunteer.objectId">
           <ion-label>{{ volunteer.name }}</ion-label>

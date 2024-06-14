@@ -54,7 +54,7 @@ const router = useRouter();
       <div class="ion-padding">
         <ion-button expand="full" class="ion-margin-top" fill="solid"
           v-if="selectedVolunteers && selectedVolunteers.length > 0"
-          @click="router.push('/recap')">Conferma</ion-button>
+          @click="router.push({ path: '/recap', replace: true, transition: false })">Conferma</ion-button>
       </div>
     </div>
   </ion-page>

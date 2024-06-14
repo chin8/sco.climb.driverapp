@@ -52,7 +52,7 @@ onMounted(async () => {
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button :default-href="'/institutes'"></ion-back-button>
+            <ion-back-button :default-href="'/schools'"></ion-back-button>
           </ion-buttons>
           <ion-title>Configurazione Percorso</ion-title>
           <ion-buttons slot="end">
@@ -70,7 +70,7 @@ onMounted(async () => {
       <div v-if="all_routes && all_routes.length > 1">
         <ion-list>
           <ion-item v-for="route in all_routes" :key="route.objectId"
-            @click="selected(route), router.push('/volunteers')">
+            @click="selected(route), router.push({ path: '/volunteers', replace: true, transition: false });">
             <ion-label>{{ route.name }}</ion-label>
             <ion-icon :icon="chevronForward" slot="end"></ion-icon>
           </ion-item>
