@@ -12,14 +12,17 @@ import {
   IonLabel,
   IonList,
   IonMenu,
-  IonMenuButton
+  IonMenuButton,
+  IonMenuToggle
 } from "@ionic/vue";
 import {
   bluetooth,
   people,
   logOut,
+  walk
 } from "ionicons/icons";
 defineProps(['pageTitle', 'pageDefaultBackLink']);
+import { useRouter } from "vue-router";
 
 import { useStopsStore } from "../../store/stops";
 const { menu_layout } = storeToRefs(useStopsStore());
@@ -28,47 +31,59 @@ const { toggleModal } = useStopsStore();
 const toggle_modal = () => {
   toggleModal()
 }
+
+const router = useRouter();
 </script>
 
 <template>
-    <!-- menu -->
-    <ion-menu v-if="menu_layout" @ionWillClose="toggle_modal()" @ionWillOpen="toggle_modal()" menu-id="main-menu"
-      content-id="main-content">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Nome Cognome</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-item>
+  <!-- menu -->
+  <ion-menu v-if="menu_layout" @ionWillClose="toggle_modal()" @ionWillOpen="toggle_modal()" menu-id="main-menu"
+    content-id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Nome Cognome</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle>
+          <ion-item @click="router.push({ path: '/stops' })">
+            <ion-icon :icon="walk" slot="start"></ion-icon>
+            <ion-label>Pedibus</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item @click="router.push({ path: '/volunteersPage' })">
             <ion-icon :icon="people" slot="start"></ion-icon>
             <ion-label>Volontari</ion-label>
           </ion-item>
-          <ion-item>
-            <ion-icon :icon="bluetooth" slot="start"></ion-icon>
-            <ion-label>Bluetooth</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon :icon="logOut" slot="start"></ion-icon>
-            <ion-label>Logout</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-menu>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+        <ion-item @click="router.push({ path: '/accuracy' })">
+          <ion-icon :icon="bluetooth" slot="start"></ion-icon>
+          <ion-label>Precisione del segnale</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+        <ion-item>
+          <ion-icon :icon="logOut" slot="start"></ion-icon>
+          <ion-label>Logout</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
 
-    <ion-page>
-      <ion-header v-if="menu_layout">
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-menu-button menu="main-menu"></ion-menu-button>
-          </ion-buttons>
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
+  <ion-page>
+    <ion-header v-if="menu_layout">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button menu="main-menu"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-      <ion-content>
-        <slot />
-      </ion-content>
-    </ion-page>
+    <ion-content>
+      <slot />
+    </ion-content>
+  </ion-page>
 </template>

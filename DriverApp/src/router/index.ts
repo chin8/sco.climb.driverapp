@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import  HomePage from '../pages/HomePage.vue';
 import  VolunteersPage from '../pages/VolunteersPage.vue';
-import  VolunteerPage from '../pages/VolunteerPage.vue';
 import Institutes from '../pages/configuration/Institutes.vue';
 import Schools from '../pages/configuration/Schools.vue';
 import Routes from '../pages/configuration/Routes.vue';
@@ -16,6 +15,9 @@ import Login from '../pages/auth/LoginPage.vue'
 import Redirect from '../pages/auth/Redirect.vue'
 import EndRedirect from '../pages/auth/EndRedirect.vue'
 import EditConfig from '../pages/EditConfig.vue'
+import Accuracy from '../pages/Accuracy.vue'
+import Finish from '../pages/Finish.vue'
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -72,12 +74,8 @@ const routes: Array<RouteRecordRaw> = [
     component:ProfilePage
   },
   {
-    path:'/volunteers',
+    path:'/volunteersPage',
     component:VolunteersPage
-  },
-  {
-    path:'/volunteer/:id',
-    component:VolunteerPage
   },
   {
     path: '/stops',
@@ -88,6 +86,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/editConfig',
     name: 'EditConfig',
     component: EditConfig
+  },
+  {
+    path: '/accuracy',
+    name: 'Accuracy',
+    component: Accuracy
+  },
+  {
+    path: '/finish',
+    name: 'Finish',
+    component: Finish
   }
 ]
 

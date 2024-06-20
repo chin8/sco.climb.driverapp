@@ -33,6 +33,8 @@ import {
   stopWatchingPosition,
 } from "../services/GeoService";
 import PassengersModal from "../pages/PassengersModal.vue";
+import { useBackButton } from '@ionic/vue';
+
 
 const router = useRouter();
 
@@ -56,6 +58,10 @@ const viewIndex = ref(0);
 const stopIndex = ref(0);
 
 const routeId: string = (selected_route?.value as any)?.objectId || "";
+
+if (routeId && all_stops.value.length == 0) {
+  fetchStops(routeId);
+}
 
 startWatchingPosition(
   function (position: any) {
@@ -141,14 +147,26 @@ const send = () => {
     nodeCheckout(child.objectId, routeId);
     nodeAtDestination(child.objectId, routeId);
   });
-  addEvents(routeId, events);
   endRoute(all_stops.value[stopIndex.value].objectId, routeId);
   stopWatchingPosition();
+  addEvents(routeId, events).then((result) => {
+          if (result) {
+            console.error('ok', result);
+            router.push({ path: '/finish', replace: true })
+          } else {
+            console.error('not ok', result);
+          }
+        })
+        .catch((err) => {
+          console.error('Error adding event:', err);
+        });
+  
 };
 
-if (routeId && all_stops.value.length == 0) {
-  fetchStops(routeId);
-}
+useBackButton(1, () => {
+  console.log('Another handler was called!');
+});
+
 </script>
 
 <template>

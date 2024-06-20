@@ -68,5 +68,8 @@ export const useStopsStore = defineStore("useStopsStore", {
     toggleModal() {
       this.isOpen = !this.isOpen;
     },
+    reset() {
+      this.$reset();
+    }
   },
 });

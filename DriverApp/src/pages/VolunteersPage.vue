@@ -1,26 +1,39 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { useVolunteerStore } from "../store";
-import {  IonItem } from '@ionic/vue';
-import { useRouter } from "vue-router";
-const { volunteers, loading, error } = storeToRefs(useVolunteerStore());
-const { fetchVolunteers } = useVolunteerStore();
-const router = useRouter() 
+import {
+  IonList,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonIcon,
+  IonAlert
+} from "@ionic/vue";
+import {
+  call
+} from "ionicons/icons";
+import { useVolunteersStore } from "../store/volunteers";
 
-fetchVolunteers();
+const { loading, error, volunteers } = storeToRefs(
+  useVolunteersStore()
+);
 </script>
 
 <template>
-    <base-layout page-title="Volontari" page-default-back-link="/home">
-  <div>
-    <p v-if="loading">Loading volunteers...</p>
-    <p v-if="error">{{ error.message }}</p>
-    <div v-if="volunteers">
-      <div v-for="volunteer in volunteers" :key="volunteer.id">
-        <ion-item @click="() => router.push(`/volunteer/${volunteer.id}`)"><p>{{ volunteer.name }}</p>
+  <ion-page>
+    <div>
+      <!-- back button -->
+      <p v-if="loading">Loading...</p>
+      <p v-if="error">{{ error.message }}</p>
+
+      <ion-list v-if="volunteers.length">
+        <ion-item v-for="volunteer in volunteers" :key="volunteer.objectId">
+          <ion-label>{{ volunteer.name }}</ion-label>
+          <div v-if="volunteer.phone" :id="`trigger-${volunteer.objectId}`">
+            <ion-icon :icon="call" slot="end"></ion-icon>
+          </div>
+          <ion-alert v-if="volunteer.phone" :trigger="`trigger-${volunteer.objectId}`" :sub-header="volunteer.name" :message="volunteer.phone"></ion-alert>
         </ion-item>
-      </div>
+      </ion-list>
     </div>
-  </div>
-  </base-layout>
+  </ion-page>
 </template>
