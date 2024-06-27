@@ -1,20 +1,18 @@
 <script setup>
 import { Auth } from "@/services/AuthService";
 import {
-  IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
   IonButton,
+  IonImg
 } from "@ionic/vue";
 import { AuthActions } from "ionic-appauth";
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { geolocalize } from "../../services/GeoService";
+import logo from "../../img/logo_climb.png"
 
 const router = useRouter();
 let event = ref("");
@@ -34,18 +32,12 @@ const signIn = () => {
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Logged Out</ion-title>
+        <ion-title>Login</ion-title>
       </ion-toolbar>
     </ion-header>
-
-    <ion-content>
-      <ion-button @click="signIn()">Sign In</ion-button>
-      <ion-card v-if="event !== ''">
-        <ion-card-header> Action Data </ion-card-header>
-        <ion-card-content>
-          {{ event }}
-        </ion-card-content>
-      </ion-card>
-    </ion-content>
+    <div class="ion-padding">
+      <ion-img :src="logo" class="ion-padding"></ion-img>
+    </div>
+    <ion-button class="ion-padding" @click="signIn()">Accedi</ion-button>
   </ion-page>
 </template>

@@ -9,15 +9,17 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonSpinner,
   IonPage,
   IonButtons,
   IonTitle,
   IonToolbar,
   IonHeader,
-  IonBackButton
+  IonBackButton,
+  IonLoading
 } from "@ionic/vue";
 import { chevronForward } from "ionicons/icons";
+import { ref } from "vue";
+
 
 const { all_schools, loading, error } = storeToRefs(
   useSchoolStore()
@@ -28,6 +30,8 @@ const { selectedInstitute } = storeToRefs(
 const { fetchSchools, selected } = useSchoolStore();
 
 const router = useRouter();
+const isLoading = ref(true);
+
 
 
 onMounted(async () => {
@@ -35,6 +39,7 @@ onMounted(async () => {
 
   if (all_schools.value && all_schools.value.length === 1) {
     setTimeout(() => {
+      isLoading.value = false;
       selected(all_schools.value[0]);
       router.push({ path: '/routes', replace: true, transition: false });
     }, 1500);
@@ -61,8 +66,7 @@ onMounted(async () => {
       <p v-if="loading">Loading...</p>
       <p v-if="error">{{ error.message }}</p>
       <div v-if="all_schools && all_schools.length < 2" class="ion-padding ion-text-center">
-        <ion-spinner class="ion-padding-top"></ion-spinner>
-        <ion-label class="ion-padding">Autoselezione della scuola...</ion-label>
+        <ion-loading :isOpen="isLoading" message="Autoselezione della scuola..."> </ion-loading>
       </div>
       <div v-if="all_schools && all_schools.length > 1">
         <ion-list>

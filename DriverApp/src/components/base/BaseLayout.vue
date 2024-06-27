@@ -59,9 +59,9 @@ const router = useRouter();
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
-        <ion-item @click="router.push({ path: '/accuracy' })">
+        <ion-item @click="router.push({ path: '/bluetooth' })">
           <ion-icon :icon="bluetooth" slot="start"></ion-icon>
-          <ion-label>Precisione del segnale</ion-label>
+          <ion-label>Segnale bluetooth</ion-label>
         </ion-item>
       </ion-menu-toggle>
         <ion-item>

@@ -15,7 +15,7 @@ import Login from '../pages/auth/LoginPage.vue'
 import Redirect from '../pages/auth/Redirect.vue'
 import EndRedirect from '../pages/auth/EndRedirect.vue'
 import EditConfig from '../pages/EditConfig.vue'
-import Accuracy from '../pages/Accuracy.vue'
+import Bluetooth from '../pages/Bluetooth.vue'
 import Finish from '../pages/Finish.vue'
 
 
@@ -88,9 +88,9 @@ const routes: Array<RouteRecordRaw> = [
     component: EditConfig
   },
   {
-    path: '/accuracy',
-    name: 'Accuracy',
-    component: Accuracy
+    path: '/bluetooth',
+    name: 'Bluetooth',
+    component: Bluetooth
   },
   {
     path: '/finish',

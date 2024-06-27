@@ -40,7 +40,7 @@ const router = useRouter();
 
 const { selected_route } = storeToRefs(useRouteStore());
 const { profile } = useProfileStore();
-const { fetchStops, addOnBoard, removeOnBoard } = useStopsStore();
+const { fetchStops, addOnBoard, removeOnBoard, changeLayout } = useStopsStore();
 const {
   nodeCheckin,
   nodeCheckout,
@@ -152,6 +152,7 @@ const send = () => {
   addEvents(routeId, events).then((result) => {
           if (result) {
             console.error('ok', result);
+            changeLayout();
             router.push({ path: '/finish', replace: true })
           } else {
             console.error('not ok', result);
@@ -166,7 +167,6 @@ const send = () => {
 useBackButton(1, () => {
   console.log('Another handler was called!');
 });
-
 </script>
 
 <template>

@@ -51,9 +51,9 @@ const helpers = () => {
 }
 
 const handleStart = async () => {
+  changeLayout();
   await setDriver(profile.value.objectId, selectedRoute.value.objectId);
   helpers();
-  changeLayout();
   await router.push({ path: '/stops', replace: true, transition: false });
 }
 </script>

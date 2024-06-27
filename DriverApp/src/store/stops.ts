@@ -63,7 +63,7 @@ export const useStopsStore = defineStore("useStopsStore", {
       });
     },
     changeLayout() {
-      this.menu_layout = true;
+      this.menu_layout = !this.menu_layout;
     },
     toggleModal() {
       this.isOpen = !this.isOpen;

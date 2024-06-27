@@ -10,15 +10,17 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonSpinner,
   IonPage,
   IonButtons,
   IonTitle,
   IonToolbar,
   IonHeader,
-  IonBackButton
+  IonBackButton,
+  IonLoading
 } from "@ionic/vue";
 import { chevronForward } from "ionicons/icons";
+import { ref } from "vue";
+
 
 const { selectedSchool } = storeToRefs(
   useSchoolStore()
@@ -32,12 +34,15 @@ const { all_routes, loading, error } = storeToRefs(
 const { fetchRoutes, selected } = useRouteStore();
 
 const router = useRouter();
+const isLoading = ref(true);
+
 
 onMounted(async () => {
   await fetchRoutes(selectedInstitute.value.objectId, selectedSchool.value.objectId);
 
   if (all_routes.value && all_routes.value.length === 1) {
     setTimeout(() => {
+      isLoading.value = false;
       selected(all_routes.value[0]);
       router.push({ path: '/volunteers', replace: true, transition: false });
     }, 1000);
@@ -64,8 +69,7 @@ onMounted(async () => {
       <p v-if="loading">Loading...</p>
       <p v-if="error">{{ error.message }}</p>
       <div v-if="all_routes && all_routes.length < 2" class="ion-padding ion-text-center">
-        <ion-spinner class="ion-padding-top"></ion-spinner>
-        <ion-label class="ion-padding">Autoselezione della linea...</ion-label>
+        <ion-loading :isOpen="isLoading" message="Autoselezione della linea..."> </ion-loading>
       </div>
       <div v-if="all_routes && all_routes.length > 1">
         <ion-list>
